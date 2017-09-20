@@ -3,3 +3,6 @@
 
 # not tracking pycache
 __pycache__/
+
+# virtualenv
+venv/
