@@ -1,0 +1,5 @@
+# not tracking local databases for clarity
+*.sqlite3
+
+# not tracking pycache
+__pycache__/
