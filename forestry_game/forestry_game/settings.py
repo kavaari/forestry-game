@@ -54,7 +54,10 @@ ROOT_URLCONF = 'forestry_game.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [ os.path.join(BASE_DIR, "forestry_game/templates/"), ],
+        'DIRS': [ 
+            os.path.join(BASE_DIR, "forestry_game/templates/"),
+            os.path.join(BASE_DIR, 'static/')
+         ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -117,7 +120,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
-STATIC_URL = '/'
+STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static", "static_root")
 
