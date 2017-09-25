@@ -7,6 +7,7 @@ Django setup
 1. Make sure you have about python 3.5.2 (probably any python 3 works anyways)
 2. pip install -r requirements.txt in your virtual env
 3. python manage.py makemigrations (prepares database model changes)
+3b. python manage.py makemigrations forestry_game
 4. python manage.py migrate (executes database changes)
 5. python manage.py collectstatic (probably not necessary untill deployment)
 6. python manage.py runserver 8080
