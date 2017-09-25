@@ -37,7 +37,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'forestry_game',
 ]
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+)
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -54,7 +59,7 @@ ROOT_URLCONF = 'forestry_game.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [ 
+        'DIRS': [
             os.path.join(BASE_DIR, "forestry_game/templates/"),
             os.path.join(BASE_DIR, 'static/')
          ],
@@ -127,4 +132,3 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static", "static_root")
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
-
