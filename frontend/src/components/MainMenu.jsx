@@ -1,13 +1,90 @@
 import React, { Component } from 'react';
-import Game from './Game';
+import Button from './Button';
+import LangSelection from './LangSelection';
+import LoginSignupForm from './LoginSignupForm';
+import './MainMenu.css';
 
 export default class MainMenu extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      loggedIn: false,
+      username: ''
+    }
+  }
+
+  handleButtonClick(e) {
+    console.log(e.target.getAttribute('id'), 'clicked');
+  }
+
+  handleFormClick(username, event) {
+    // Set loggedIn for testing purposes
+    // TODO: connect to backend
+    this.setState({
+      loggedIn: true,
+      username: username
+    });
+  }
+
   render() {
-    // Just render the Game component for now
-    // TODO: Real implementation
+
+    var langSelStyle = {
+      position: 'fixed',
+      right: '10%',
+      top: '5%'
+    }
+    
+    var leftButtonStyle = {
+      position: 'fixed',
+      left: '10%',
+      bottom: '10%'
+    }
+
+    var rightButtonStyle = {
+      position: 'fixed',
+      right: '10%',
+      bottom: '10%',
+      backgroundColor: 'var(--jd-yellow)'
+    }
+
+    var centerElement;
+    var startButtonText;
+    if (this.state.loggedIn) {
+
+      centerElement = (
+        <div id="welcome-message">
+          Welcome,<br />
+          {this.state.username}
+        </div>
+      );
+
+      startButtonText = 'Start game';
+
+    } else {
+
+      centerElement = <LoginSignupForm handleClick={this.handleFormClick.bind(this)} />;
+      startButtonText = 'Play as guest';
+    }
+
     return (
       <div className="MainMenu">
-        <Game />
+
+        <LangSelection style={langSelStyle} />
+
+        {centerElement}
+
+        <Button
+          id="button-how-to-play"
+          text="How to play"
+          style={leftButtonStyle}
+          handleClick={this.handleButtonClick.bind(this)} />
+
+        <Button
+          id="button-start-game"
+          text={startButtonText}
+          style={rightButtonStyle}
+          handleClick={this.handleButtonClick.bind(this)} />
+
       </div>
     );
   }

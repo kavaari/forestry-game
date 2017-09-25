@@ -1,0 +1,29 @@
+:root {
+  /* Variables */
+  --lang-sel-height: 30px;
+}
+
+#lang-sel-flag, #lang-sel-text {
+  display: inline-block;
+}
+
+#lang-sel-flag {
+  width: 50px;
+  height: var(--lang-sel-height);
+  background-color: #FFF;
+  box-shadow: var(--menu-shadow);
+}
+
+#lang-sel-text {
+  color: var(--jd-gray);
+  height: var(--lang-sel-height);
+  line-height: var(--lang-sel-height);
+  vertical-align: top;
+  padding-left: 5px;
+  font-size: 1.2em;
+  text-shadow: var(--menu-shadow);
+}
+
+#lang-sel-text:hover {
+  cursor: default;
+}
