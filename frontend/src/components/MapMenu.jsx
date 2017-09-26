@@ -2,9 +2,71 @@ import React, { Component } from 'react';
 import Button from './Button';
 import './MapMenu.css';
 
+var dummyMaps = [
+  {
+    name: 'Map with 4 types',
+    image: 'https://placekitten.com/1001/601',
+    pileTypes: [
+      {
+        name: 'Birch Sawlog',
+        amount: 3
+      },
+      {
+        name: 'Birch Pulp',
+        amount: 22
+      },
+      {
+        name: 'Pine Pulp',
+        amount: 31
+      },
+      {
+        name: 'Spruce Pulp',
+        amount: 3
+      }
+    ],
+    routeLength: 4184.3,
+    storageAreas: 3,
+    passingLimit: false
+  },
+  {
+    name: 'Another map',
+    image: 'https://placekitten.com/801/701',
+    pileTypes: [
+      {
+        name: 'Pine Sawlog',
+        amount: 45
+      },
+      {
+        name: 'Mystery Wood',
+        amount: 99
+      }
+    ],
+    routeLength: 234.1,
+    storageAreas: 1,
+    passingLimit: false
+  },
+  {
+    name: 'Third map\'s the charm',
+    image: 'https://placekitten.com/1101/401',
+    pileTypes: [
+      {
+        name: 'Pine Pulp',
+        amount: 1
+      }
+    ],
+    routeLength: 9000.1,
+    storageAreas: 50,
+    passingLimit: false
+  }
+];
+
 export default class MapMenu extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      maps: dummyMaps,
+      selectedMapIndex: 0
+    }
   }
 
   handleButtonClick(e) {
@@ -15,7 +77,59 @@ export default class MapMenu extends Component {
     }
   }
 
+  handlePreviousClick() {
+    if (this.state.selectedMapIndex === 0) {
+
+      this.setState({
+        selectedMapIndex: this.state.maps.length - 1
+      });
+    
+    } else {
+
+      this.setState((prevState) => ({
+        selectedMapIndex: prevState.selectedMapIndex - 1
+      }));
+    }
+  }
+
+  handleNextClick() {
+    if (this.state.selectedMapIndex === this.state.maps.length - 1) {
+
+      this.setState({
+        selectedMapIndex: 0
+      });
+    
+    } else {
+
+      this.setState((prevState) => ({
+        selectedMapIndex: prevState.selectedMapIndex + 1
+      }));
+    }
+
+  }
+
   render() {
+
+    var selMap = this.state.maps[this.state.selectedMapIndex];
+
+    var pileTypes = selMap.pileTypes.map(pileType => 
+      <div className="section-list-item" key={pileType.name}>
+        <div className="section-list-item-name">
+          {pileType.name}
+        </div>
+        <div className="section-list-item-value">
+          {pileType.amount}
+        </div>
+      </div>
+    );
+
+    var mapImage = {
+      backgroundImage: 'url(' + selMap.image + ')'
+    };
+
+    var firstMap = this.state.selectedMapIndex === 0 ? true : false;
+    var lastMap = this.state.selectedMapIndex === this.state.maps.length - 1 ? true : false;
+
     return (
       <div className="MapMenu">
         
@@ -39,68 +153,49 @@ export default class MapMenu extends Component {
               <div id="map-info">
 
                 <div className="section">
+
                   <div className="section-header">
                     Pile Types and Amounts
                   </div>
-                  <div className="section-list-item">
-                    <div className="section-list-item-name">
-                      Birch Sawlog
-                    </div>
-                    <div className="section-list-item-value">
-                      3
-                    </div>
-                  </div>
-                  <div className="section-list-item">
-                    <div className="section-list-item-name">
-                      Birch Pulp
-                    </div>
-                    <div className="section-list-item-value">
-                      22
-                    </div>
-                  </div>
-                  <div className="section-list-item">
-                    <div className="section-list-item-name">
-                      Pine Pulp
-                    </div>
-                    <div className="section-list-item-value">
-                      31
-                    </div>
-                  </div>
-                  <div className="section-list-item">
-                    <div className="section-list-item-name">
-                      Spruce Pulp
-                    </div>
-                    <div className="section-list-item-value">
-                      3
-                    </div>
-                  </div>
+
+                  {pileTypes}
+
                 </div>
 
                 <div className="section">
+
                   <div className="section-header">
                     Route Length
                   </div>
+
                   <div className="section-value">
-                    4184.3 m
+                    {selMap.routeLength + ' m'}
                   </div>
+
                 </div>
 
                 <div className="section">
+
                   <div className="section-header">
                     Storage Area Amount
                   </div>
+
                   <div className="section-value">
-                    3
+                    {selMap.storageAreas}
                   </div>
+
                 </div>
 
                 <div className="section">
+
                   <div className="section-header">
                     Passing Limit
                   </div>
+
                   <div className="section-value">
-                    NO
+                    {selMap.passingLimit ? 'YES' : 'NO'}
                   </div>
+
                 </div>
 
               </div>
@@ -113,19 +208,38 @@ export default class MapMenu extends Component {
 
             </div>
 
-            <div id="right">
-              <div className="map-chevron map-chevron-inactive" id="map-chevron-left">
+            <div
+              id="right"
+              style={mapImage} >
+
+              <div id="map-name">
+                {selMap.name}
+              </div>
+
+              <div
+                className={firstMap ? 'map-chevron map-chevron-inactive' : 'map-chevron'}
+                id="map-chevron-left"
+                onClick={firstMap ? '' : this.handlePreviousClick.bind(this)} >
+
                 {'<'}
+
               </div>
-              <div className="map-chevron" id="map-chevron-right">
+
+              <div
+                className={lastMap ? 'map-chevron map-chevron-inactive' : 'map-chevron'}
+                id="map-chevron-right"
+                onClick={lastMap ? '' : this.handleNextClick.bind(this)} >
+
                 {'>'}
+
               </div>
+
             </div>
 
           </div>
 
           <div id="bottom-row">
-            1/20
+            {(this.state.selectedMapIndex + 1) + '/' + this.state.maps.length}
           </div>
 
         </div>
