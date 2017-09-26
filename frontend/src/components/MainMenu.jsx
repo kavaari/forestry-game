@@ -8,7 +8,6 @@ export default class MainMenu extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loggedIn: false,
       username: ''
     }
   }
@@ -25,9 +24,10 @@ export default class MainMenu extends Component {
     // Set loggedIn for testing purposes
     // TODO: connect to backend
     this.setState({
-      loggedIn: true,
       username: username
     });
+
+    this.props.toggleLogin();
   }
 
   render() {
@@ -53,7 +53,7 @@ export default class MainMenu extends Component {
 
     var centerElement;
     var startButtonText;
-    if (this.state.loggedIn) {
+    if (this.props.loggedIn) {
 
       centerElement = (
         <div id="welcome-message">
