@@ -51,11 +51,11 @@
   font-size: 1.1em;
 }
 
-.Button {
+#left .Button {
   margin-bottom: var(--left-bottom-margin);
 }
 
-#button-start-game {
+#left #button-start-game {
   margin-bottom: 0;
   position: absolute;
   bottom: 0;
