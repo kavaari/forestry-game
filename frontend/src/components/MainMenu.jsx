@@ -14,7 +14,11 @@ export default class MainMenu extends Component {
   }
 
   handleButtonClick(e) {
-    console.log(e.target.getAttribute('id'), 'clicked');
+    var clicked = e.target.getAttribute('id');
+
+    if (clicked === 'button-start-game') {
+      this.props.switchView('mapmenu');
+    }
   }
 
   handleFormClick(username, event) {
