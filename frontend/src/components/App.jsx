@@ -7,7 +7,7 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentView: <MainMenu switchView={this.switchView.bind(this)} />
+      currentView: <MapMenu switchView={this.switchView.bind(this)} />
     }
   }
 

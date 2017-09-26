@@ -10,6 +10,7 @@
 body {
   margin: 0;
   font-family: Helvetica, Sans-serif;
+  background-color: #58595b;
 
   /* Make everything unselectable */
   -webkit-user-select: none; /* Safari */        
