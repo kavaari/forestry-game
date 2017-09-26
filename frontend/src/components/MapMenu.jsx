@@ -10,8 +10,8 @@ export default class MapMenu extends Component {
   handleButtonClick(e) {
     var clicked = e.target.getAttribute('id');
 
-    if (clicked === 'button-start-game') {
-      this.props.switchView('mapmenu');
+    if (clicked === 'button-back') {
+      this.props.switchView('mainmenu');
     }
   }
 
