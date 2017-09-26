@@ -33,7 +33,8 @@ export default class MapMenu extends Component {
               <Button
                 id="button-create-map"
                 text="Create map"
-                handleClick={this.handleButtonClick.bind(this)} />
+                handleClick={this.handleButtonClick.bind(this)}
+                inactive={this.props.loggedIn ? false : true} />
 
               <div id="map-info">
 

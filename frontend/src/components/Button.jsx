@@ -7,9 +7,14 @@ export default function Button(props) {
     props.style.borderRadius = '5px';
   }
 
+  var inactive;
+  if (props.inactive) {
+    inactive = true;
+  }
+
   return (
     <div
-      className="Button"
+      className={inactive ? 'Button inactive' : 'Button'}
       id={props.id}
       style={props.style}
       onClick={props.handleClick} >

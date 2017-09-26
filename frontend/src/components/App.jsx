@@ -10,19 +10,23 @@ export default class App extends Component {
       currentView: <MainMenu
                      switchView={this.switchView.bind(this)}
                      loggedIn={false}
-                     toggleLogin={this.toggleLogin.bind(this)} />,
-      loggedIn: false
+                     toggleLogin={this.toggleLogin.bind(this)}
+                     username="" />,
+      loggedIn: false,
+      username: ''
     }
   }
 
-  toggleLogin() {
+  toggleLogin(username) {
     console.log('msg');
     this.setState((prevState) => ({
       loggedIn: !prevState.loggedIn,
       currentView: <MainMenu
                      switchView={this.switchView.bind(this)}
                      loggedIn={!prevState.loggedIn}
-                     toggleLogin={this.toggleLogin.bind(this)} />
+                     toggleLogin={this.toggleLogin.bind(this)}
+                     username={username} />,
+      username: username
     }));
   }
 
@@ -33,7 +37,8 @@ export default class App extends Component {
         currentView: <MainMenu
                        switchView={this.switchView.bind(this)}
                        loggedIn={this.state.loggedIn}
-                       toggleLogin={this.toggleLogin.bind(this)} />
+                       toggleLogin={this.toggleLogin.bind(this)}
+                       username={this.state.username} />
       });
 
     } else if (newView === 'mapmenu') {
@@ -42,7 +47,8 @@ export default class App extends Component {
         currentView: <MapMenu
                        switchView={this.switchView.bind(this)}
                        loggedIn={this.state.loggedIn}
-                       toggleLogin={this.toggleLogin.bind(this)} />
+                       toggleLogin={this.toggleLogin.bind(this)}
+                       username={this.state.username} />
       });
     }    
   }

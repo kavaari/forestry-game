@@ -26,3 +26,16 @@
 .Button:active {
   filter: brightness(95%);
 }
+
+.inactive {
+  color: rgba(10, 10, 10, 0.5);
+}
+
+.inactive:hover {
+  cursor: default;
+  filter: none;
+}
+
+.inactive:active {
+  filter: none;
+}

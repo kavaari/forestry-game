@@ -7,9 +7,6 @@ import './MainMenu.css';
 export default class MainMenu extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      username: ''
-    }
   }
 
   handleButtonClick(e) {
@@ -23,11 +20,8 @@ export default class MainMenu extends Component {
   handleFormClick(username, event) {
     // Set loggedIn for testing purposes
     // TODO: connect to backend
-    this.setState({
-      username: username
-    });
 
-    this.props.toggleLogin();
+    this.props.toggleLogin(username);
   }
 
   render() {
@@ -58,7 +52,7 @@ export default class MainMenu extends Component {
       centerElement = (
         <div id="welcome-message">
           Welcome,<br />
-          {this.state.username}
+          {this.props.username}
         </div>
       );
 
