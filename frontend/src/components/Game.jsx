@@ -1,16 +1,79 @@
 import React, { Component } from 'react';
 import './Game.css';
+import Button from './Button';
 
 export default class Game extends Component {
 
   componentDidMount() {
-    canvasStuff();
+    //canvasStuff();
+  }
+
+  handleButtonClick(e) {
+    var clicked = e.target.getAttribute('id');
+
+    if (clicked === 'button-back') {
+      this.props.switchView('mainmenu');
+    }
   }
 
   render() {
+    var buttonStyle = {
+      backgroundColor: 'var(--jd-yellow)',
+      width: '100%'
+    }
     return (
       <div className="Game">
         <canvas id="canvas-game"></canvas>
+        <div id="game-info">
+          <div id="game-stats">
+            <div id="game-stats-grouped">
+              <div id="user">{this.props.username}</div>
+              <div id="time">00:00:00</div>
+              <div id="distance">100m</div>
+              <div id="unload-count">3</div>
+              <Button 
+                id="button-show-report"
+                text="Show report"
+                style={buttonStyle} />
+            </div>
+          </div>
+
+          <div id="logs-remaining">
+            <div id="logs-remaining-row">
+              <div id="logs-remaining-count">1</div>
+              <div id="logs-remaining-count">2</div>
+              <div id="logs-remaining-count">3</div>
+              <div id="logs-remaining-count">4</div>
+            </div>
+          </div>
+
+          <div id="log-load">
+            <div id="log-load-row">
+              <div id="log-load-fill">1</div>
+              <div id="log-load-fill">2</div>
+              <div id="log-load-fill">3</div>
+              <div id="log-load-fill">4</div>
+            </div>
+            <div id="log-load-row">
+              <div id="log-load-fill">1</div>
+              <div id="log-load-fill">2</div>
+              <div id="log-load-fill">3</div>
+              <div id="log-load-fill">4</div>
+            </div>
+            <div id="log-load-row">
+              <div id="log-load-fill">1</div>
+              <div id="log-load-fill">2</div>
+              <div id="log-load-fill">3</div>
+              <div id="log-load-fill">4</div>
+            </div>
+            <div id="log-load-row">
+              <div id="log-load-fill">1</div>
+              <div id="log-load-fill">2</div>
+              <div id="log-load-fill">3</div>
+              <div id="log-load-fill">4</div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }

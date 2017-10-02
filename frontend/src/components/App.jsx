@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import MainMenu from './MainMenu';
 import MapMenu from './MapMenu';
+import Game from './Game';
 
 export default class App extends Component {
   constructor(props) {
@@ -50,7 +51,22 @@ export default class App extends Component {
                        toggleLogin={this.toggleLogin.bind(this)}
                        username={this.state.username} />
       });
-    }    
+    } else if (newView === 'gameplayview') {
+      var username = "";
+      if (this.state.loggedIn) {
+        username = this.state.username;
+      } else {
+        var rndNumber = Math.floor(Math.random() * 999999) + 1;
+        username = 'guest' + rndNumber.toString();
+      }
+      this.setState({
+        currentView: <Game 
+                       switchView={this.switchView.bind(this)}
+                       loggedIn={this.state.loggedIn}
+                       toggleLogin={this.toggleLogin.bind(this)}
+                       username={username} />
+      });
+    }
   }
 
   render() {
