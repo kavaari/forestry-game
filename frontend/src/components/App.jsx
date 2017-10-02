@@ -78,34 +78,8 @@ export default class App extends Component {
         );
         break;
 
-      // this.setState({
-      //   currentView: <MapMenu
-      //                  switchView={this.switchView.bind(this)}
-      //                  loggedIn={this.state.loggedIn}
-      //                  toggleLogin={this.toggleLogin.bind(this)}
-      //                  username={this.state.username} />
-      // });
-//     } else if (newView === 'gameplayview') {
-//       var username = "";
-//       if (this.state.loggedIn) {
-//         username = this.state.username;
-//       } else {
-//         var rndNumber = Math.floor(Math.random() * 999999) + 1;
-//         username = 'guest' + rndNumber.toString();
-//       }
-//       this.setState({
-//         currentView: <Game 
-//                        switchView={this.switchView.bind(this)}
-//                        loggedIn={this.state.loggedIn}
-//                        toggleLogin={this.toggleLogin.bind(this)}
-//                        username={username} />
-//       });
-//     }
-//   }
-// >>>>>>> 281c98ce9465ae24d39bac35348a8beb48c6d824
-
       default:
-        view = <div>Default</div>;
+        view = <div>You should never see this text.</div>;
         break;
     }
     return (
