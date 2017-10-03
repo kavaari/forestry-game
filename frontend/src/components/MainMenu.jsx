@@ -17,7 +17,7 @@ export default class MainMenu extends Component {
     }
   }
 
-  handleFormClick(username, event) {
+  handleFormClick(username) {
     // Set loggedIn for testing purposes
     // TODO: connect to backend
 
@@ -67,7 +67,10 @@ export default class MainMenu extends Component {
     return (
       <div className="MainMenu">
 
-        <LangSelection style={langSelStyle} />
+        <LangSelection
+          style={langSelStyle}
+          lang={this.props.lang}
+          changeLanguage={this.props.changeLanguage} />
 
         {centerElement}
 

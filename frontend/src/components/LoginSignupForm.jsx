@@ -39,13 +39,22 @@ export default class LoginSignupForm extends Component {
     }
   }
 
+  handleSubmit(e) {
+    e.preventDefault();
+    this.props.handleClick(this.state.username);
+  }
+
   render() {
     var buttonStyle = {
       margin: 'auto',
       width: 'var(--form-width)',
       backgroundColor: 'var(--jd-yellow)',
       boxShadow: 'var(--menu-shadow-2)'
-    }
+    };
+
+    var hiddenSubmit = {
+      display: 'none'
+    };
 
     var emailField;
     var formButton;
@@ -86,7 +95,7 @@ export default class LoginSignupForm extends Component {
 
           {this.state.message ? <div id="message">{this.state.message}</div> : ''}
 
-          <form>
+          <form onSubmit={this.handleSubmit.bind(this)}>
 
             <input 
               type="text"
@@ -105,6 +114,8 @@ export default class LoginSignupForm extends Component {
               placeholder="password"            
               value={this.state.password}
               onChange={this.handleInputChange.bind(this)} />
+
+            <input type="submit" style={hiddenSubmit} />
 
           </form>
 
