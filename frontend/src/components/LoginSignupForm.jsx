@@ -39,6 +39,11 @@ export default class LoginSignupForm extends Component {
     }
   }
 
+  handleSubmit(e) {
+    e.preventDefault();
+    this.props.handleClick(this.state.username);
+  }
+
   render() {
     var buttonStyle = {
       margin: 'auto',
@@ -90,7 +95,7 @@ export default class LoginSignupForm extends Component {
 
           {this.state.message ? <div id="message">{this.state.message}</div> : ''}
 
-          <form onSubmit={() => this.props.handleClick(this.state.username)}>
+          <form onSubmit={this.handleSubmit.bind(this)}>
 
             <input 
               type="text"

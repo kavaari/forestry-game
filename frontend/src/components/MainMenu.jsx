@@ -17,7 +17,7 @@ export default class MainMenu extends Component {
     }
   }
 
-  handleFormClick(username, event) {
+  handleFormClick(username) {
     // Set loggedIn for testing purposes
     // TODO: connect to backend
 
