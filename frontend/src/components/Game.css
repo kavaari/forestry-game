@@ -4,7 +4,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  z-index: -1;
+  z-index: 1;
 }
 
 html {
@@ -14,8 +14,7 @@ html {
 .Game {  
   width: 100vw;
   height: 100vh;
-  /*Comment the line below when applying canvas game*/
-  background-color: rgb(92,143,72);
+  z-index: auto;
 }
 
 #game-stats:hover, #logs-remaining:hover {
@@ -23,7 +22,9 @@ html {
 }
 
 #game-info {
+  position: fixed;
 	padding: 20px;
+  z-index: 10;
 }
 
 #game-stats {
@@ -96,5 +97,4 @@ html {
   text-align: center;
   font: 16px Arial, sans-serif;
   display: inline-block;
-  z-index: 1;
 }
