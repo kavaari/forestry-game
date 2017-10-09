@@ -6,13 +6,14 @@ import GameCanvas from '../game/game';
 export default class Game extends Component {
 
   componentDidMount() {
-    var gameCanvas = new GameCanvas;
+    this.gameCanvas = new GameCanvas;
   }
 
   handleButtonClick(e) {
     var clicked = e.target.getAttribute('id');
 
-    if (clicked === 'button-back') {
+    if (clicked === 'button-quit') {
+      this.gameCanvas.destroy();
       this.props.switchView('mainmenu');
     }
   }
@@ -21,11 +22,21 @@ export default class Game extends Component {
     var buttonStyle = {
       backgroundColor: 'var(--jd-yellow)',
       width: '100%'
-    }
+    };
+    var quitButtonStyle = {
+      width: '180px',
+      height: '40px',
+      lineHeight: '40px'
+    };
     return (
       <div className="Game">
         <div id="canvas-game"></div>
         <div id="game-info">
+          <Button 
+                id="button-quit"
+                text="Quit" 
+                style={quitButtonStyle}
+                handleClick={this.handleButtonClick.bind(this)} />
           <div id="game-stats">
             <div id="game-stats-grouped">
               <div id="user">{this.props.username}</div>

@@ -21,7 +21,7 @@ export default class Truck {
     stage.addChild(this.sprite);
   }
 
-  update(timeDelta) {        
+  update(timeDelta) {
     var direction = 0;
     if(Key.up.isDown) {
       direction = 1
@@ -59,7 +59,6 @@ export default class Truck {
     this.sprite.x = point.x;
     this.sprite.y = point.y;
 
-    this.sprite.rotation = Math.atan2(pB.y - pA.y, pB.x - pA.x) + Math.PI/2;
-        
+    this.sprite.rotation = Math.atan2(pB.y - pA.y, pB.x - pA.x) + Math.PI/2;    
   }
 }

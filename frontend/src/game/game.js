@@ -89,10 +89,16 @@ export default class GameCanvas {
     document.getElementById('canvas-game').addEventListener("mousewheel", mouseWheelEvent, false);
 
     this.truck = new Truck(MAP.startpoint.x, MAP.startpoint.y, game.stage, MAP.routes);
+    this.game = game;
   }
 
   update(delta)
   {
     this.truck.update(delta)
+  }
+
+  destroy()
+  {
+    this.game.destroy(true);
   }
 }
