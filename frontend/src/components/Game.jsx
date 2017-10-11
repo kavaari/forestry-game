@@ -4,9 +4,35 @@ import Button from './Button';
 import GameCanvas from '../game/game';
 
 export default class Game extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      time: 0,
+      distance: 0,
+      score: 0
+    }
+  }
+
+  updateTime(time) {
+    this.setState({
+      time: time
+    });
+  }
+
+  updateDistance(distance) {
+    this.setState({
+      distance: distance
+    });
+  }
+
+  updateScore(score) {
+    this.setState({
+      score: score
+    })
+  }
 
   componentDidMount() {
-    this.gameCanvas = new GameCanvas;
+    this.gameCanvas = new GameCanvas(this.updateTime.bind(this), this.updateDistance.bind(this), this.updateScore.bind(this));
   }
 
   handleButtonClick(e) {
@@ -40,9 +66,9 @@ export default class Game extends Component {
           <div id="game-stats">
             <div id="game-stats-grouped">
               <div id="user">{this.props.username}</div>
-              <div id="time">00:00:00</div>
-              <div id="distance">100m</div>
-              <div id="unload-count">3</div>
+              <div id="time">{this.state.time}</div>
+              <div id="distance">{this.state.distance}m</div>
+              <div id="unload-count">{this.state.score}</div>
               <Button 
                 id="button-show-report"
                 text="Show report"
