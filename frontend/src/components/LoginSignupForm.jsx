@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import Button from './Button';
 import './LoginSignupForm.css';
+import { FadeInFadeOut, TranslateDown } from './animation';
+import './animation.css';
 
 export default class LoginSignupForm extends Component {
   constructor(props) {
@@ -10,7 +12,8 @@ export default class LoginSignupForm extends Component {
       username: '',
       password: '',
       email: '',
-      message: undefined
+      message: undefined,
+      viewAnimation: true
     }
   }
 
@@ -25,18 +28,25 @@ export default class LoginSignupForm extends Component {
   }
 
   handleSignupLinkClick() {
-    if (this.state.currentView === 'login') {
+    this.setState({
+      viewAnimation: false
+    });
 
-      this.setState({
-        currentView: 'signup'
-      });
-
-    } else {
-
-      this.setState({
-        currentView: 'login'
-      });
-    }
+    var self = this;
+    setTimeout(function() {
+      if (self.state.currentView === 'login') {
+        self.setState({
+          currentView: 'signup',
+          viewAnimation: true
+        });
+      } else {
+        self.setState({
+          currentView: 'login',
+          viewAnimation: true
+        });
+      }
+    }, 350); // Exit animation duration
+    
   }
 
   handleSubmit(e) {
@@ -89,57 +99,61 @@ export default class LoginSignupForm extends Component {
     }
 
     return (
-      <div className="LoginForm">
+      <TranslateDown in={this.state.viewAnimation}>
+      <FadeInFadeOut in={this.state.viewAnimation}>
+        <div className="LoginForm">
 
-        <div id="login-form">
+          <div id="login-form">
 
-          {this.state.message ? <div id="message">{this.state.message}</div> : ''}
+            {this.state.message ? <div id="message">{this.state.message}</div> : ''}
 
-          <form onSubmit={this.handleSubmit.bind(this)}>
+            <form onSubmit={this.handleSubmit.bind(this)}>
 
-            <input 
-              type="text"
-              id="username"
-              name="username"
-              placeholder="username"            
-              value={this.state.username}
-              onChange={this.handleInputChange.bind(this)} />
+              <input 
+                type="text"
+                id="username"
+                name="username"
+                placeholder="username"            
+                value={this.state.username}
+                onChange={this.handleInputChange.bind(this)} />
 
-            {this.state.currentView === 'signup' ? emailField : ''}
+              {this.state.currentView === 'signup' ? emailField : ''}
 
-            <input 
-              type="password"
-              id="password"
-              name="password"
-              placeholder="password"            
-              value={this.state.password}
-              onChange={this.handleInputChange.bind(this)} />
+              <input 
+                type="password"
+                id="password"
+                name="password"
+                placeholder="password"            
+                value={this.state.password}
+                onChange={this.handleInputChange.bind(this)} />
 
-            <input type="submit" style={hiddenSubmit} />
+              <input type="submit" style={hiddenSubmit} />
 
-          </form>
+            </form>
 
-          {formButton}
+            {formButton}
+
+          </div>
+
+          <div id="signup-message">
+
+            {this.state.currentView === 'login' ? 'Don\'t have and account? ' : 'Already have an account? '}
+            
+            <span
+              id="signup-link"
+              onClick={this.handleSignupLinkClick.bind(this)} >
+
+              {this.state.currentView === 'login' ? 'Sign Up' : 'Log In'}
+
+            </span>
+            
+            {' here!'}
+
+          </div>
 
         </div>
-
-        <div id="signup-message">
-
-          {this.state.currentView === 'login' ? 'Don\'t have and account? ' : 'Already have an account? '}
-          
-          <span
-            id="signup-link"
-            onClick={this.handleSignupLinkClick.bind(this)} >
-
-            {this.state.currentView === 'login' ? 'Sign Up' : 'Log In'}
-
-          </span>
-          
-          {' here!'}
-
-        </div>
-
-      </div>
+      </FadeInFadeOut>
+      </TranslateDown>
     );
   }
 }

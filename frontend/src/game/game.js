@@ -94,6 +94,9 @@ export default class GameCanvas {
 
   destroy()
   {
-    this.game.destroy(true);
+    var self = this;
+    setTimeout(function() {
+      self.game.destroy(true);
+    }, 350); // Wait for game view exit animation to finish    
   }
 }

@@ -3,6 +3,8 @@ import './App.css';
 import MainMenu from './MainMenu';
 import MapMenu from './MapMenu';
 import Game from './Game';
+import { FadeInFadeOut } from './animation';
+import './animation.css';
 
 export default class App extends Component {
   constructor(props) {
@@ -11,8 +13,16 @@ export default class App extends Component {
       currentView: 'mainmenu',
       loggedIn: false,
       username: '',
-      lang: 'fi'
+      lang: 'fi',
+      viewAnimation: false
     }
+  }
+
+  componentDidMount() {
+    // Display first view enter animation
+    this.setState({
+      viewAnimation: true
+    });
   }
 
   changeLanguage(newLanguage) {
@@ -29,9 +39,20 @@ export default class App extends Component {
   }
 
   switchView(newView) {
+    // display view exit animation
     this.setState({
-      currentView: newView
-    });   
+      viewAnimation: false
+    });
+
+    // After exit animation, switch view and start new view enter animation
+    var self = this;
+    setTimeout(function() {
+      self.setState({
+        currentView: newView,
+        viewAnimation: true
+      });
+    }, 350); // Duration of fade out animation
+       
   }
 
   render() {
@@ -84,8 +105,9 @@ export default class App extends Component {
     }
     return (
       <div className="App">
-
+      <FadeInFadeOut in={this.state.viewAnimation}>
         {view}
+      </FadeInFadeOut>
         
       </div>
     );

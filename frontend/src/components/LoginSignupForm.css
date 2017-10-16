@@ -25,11 +25,12 @@
 
 #signup-link {
   color: var(--jd-yellow);
+  transition: color 150ms ease;
 }
 
 #signup-link:hover {
   cursor: pointer;
-  filter: brightness(105%);
+  color: var(--jd-green);
 }
 
 #signup-link:active {

@@ -3,10 +3,22 @@ import Button from './Button';
 import LangSelection from './LangSelection';
 import LoginSignupForm from './LoginSignupForm';
 import './MainMenu.css';
+import { FadeInFadeOut, TranslateDown, TranslateRight, TranslateLeft } from './animation';
+import './animation.css';
 
 export default class MainMenu extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      appearAnimation: false,
+      centerElementAnimation: true
+    }
+  }
+
+  componentDidMount() {
+    this.setState({
+      appearAnimation: true
+    });
   }
 
   handleButtonClick(e) {
@@ -21,7 +33,18 @@ export default class MainMenu extends Component {
     // Set loggedIn for testing purposes
     // TODO: connect to backend
 
-    this.props.toggleLogin(username);
+    this.setState({
+      centerElementAnimation: false
+    });
+
+    var self = this;
+    setTimeout(function() {
+      self.props.toggleLogin(username);
+      self.setState({
+        centerElementAnimation: true
+      });
+    }, 350) // Exit animation duration
+    
   }
 
   render() {
@@ -67,24 +90,36 @@ export default class MainMenu extends Component {
     return (
       <div className="MainMenu">
 
-        <LangSelection
-          style={langSelStyle}
-          lang={this.props.lang}
-          changeLanguage={this.props.changeLanguage} />
+        <TranslateLeft in={this.state.appearAnimation}>
+          <LangSelection
+            style={langSelStyle}
+            lang={this.props.lang}
+            changeLanguage={this.props.changeLanguage} />
+        </TranslateLeft>
 
-        {centerElement}
+        <TranslateDown in={this.state.appearAnimation}>
+          <FadeInFadeOut in={this.state.centerElementAnimation}>
+          <TranslateDown in={this.state.centerElementAnimation}>
+            {centerElement}
+          </TranslateDown>
+          </FadeInFadeOut>
+        </TranslateDown>
 
-        <Button
-          id="button-how-to-play"
-          text="How to play"
-          style={leftButtonStyle}
-          handleClick={this.handleButtonClick.bind(this)} />
+        <TranslateRight in={this.state.appearAnimation}>
+          <Button
+            id="button-how-to-play"
+            text="How to play"
+            style={leftButtonStyle}
+            handleClick={this.handleButtonClick.bind(this)} />
+        </TranslateRight>
 
-        <Button
-          id="button-start-game"
-          text={startButtonText}
-          style={rightButtonStyle}
-          handleClick={this.handleButtonClick.bind(this)} />
+        <TranslateLeft in={this.state.appearAnimation}>
+          <Button
+            id="button-start-game"
+            text={startButtonText}
+            style={rightButtonStyle}
+            handleClick={this.handleButtonClick.bind(this)} />
+        </TranslateLeft>
 
       </div>
     );

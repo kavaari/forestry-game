@@ -16,11 +16,13 @@
   font-size: 1.5em;
   color: rgba(10, 10, 10, 0.9);
   box-shadow: var(--menu-shadow);
+
+  transition: background-color 150ms ease;
 }
 
 .Button:hover {
   cursor: pointer;
-  filter: brightness(105%);
+  background-color: var(--jd-green) !important;
 }
 
 .Button:active {
@@ -34,6 +36,7 @@
 .inactive:hover {
   cursor: default;
   filter: none;
+  background-color: var(--jd-gray) !important;
 }
 
 .inactive:active {

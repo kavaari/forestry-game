@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import Button from './Button';
 import './MapMenu.css';
+import { TranslateRight, TranslateLeft } from './animation';
+import './animation.css';
 
 var dummyMaps = [
   {
@@ -65,8 +67,15 @@ export default class MapMenu extends Component {
     super(props);
     this.state = {
       maps: dummyMaps,
-      selectedMapIndex: 0
+      selectedMapIndex: 0,
+      appearAnimation: false
     }
+  }
+
+  componentDidMount() {
+    this.setState({
+      appearAnimation: true
+    });
   }
 
   handleButtonClick(e) {
@@ -139,110 +148,116 @@ export default class MapMenu extends Component {
 
           <div id="top">
 
-            <div id="left">
+            <TranslateRight in={this.state.appearAnimation}>
+              <div id="left">
 
-              <Button
-                id="button-back"
-                text="Back to menu"
-                handleClick={this.handleButtonClick.bind(this)} />
+                <Button
+                  id="button-back"
+                  text="Back to menu"
+                  handleClick={this.handleButtonClick.bind(this)} />
 
-              <Button
-                id="button-create-map"
-                text="Create map"
-                handleClick={this.handleButtonClick.bind(this)}
-                inactive={this.props.loggedIn ? false : true} />
+                <Button
+                  id="button-create-map"
+                  text="Create map"
+                  handleClick={this.handleButtonClick.bind(this)}
+                  inactive={this.props.loggedIn ? false : true} />
 
-              <div id="map-info">
+                <div id="map-info">
 
-                <div className="section">
+                  <div className="section">
 
-                  <div className="section-header">
-                    Pile Types and Amounts
+                    <div className="section-header">
+                      Pile Types and Amounts
+                    </div>
+
+                    {pileTypes}
+
                   </div>
 
-                  {pileTypes}
+                  <div className="section">
+
+                    <div className="section-header">
+                      Route Length
+                    </div>
+
+                    <div className="section-value">
+                      {selMap.routeLength + ' m'}
+                    </div>
+
+                  </div>
+
+                  <div className="section">
+
+                    <div className="section-header">
+                      Storage Area Amount
+                    </div>
+
+                    <div className="section-value">
+                      {selMap.storageAreas}
+                    </div>
+
+                  </div>
+
+                  <div className="section">
+
+                    <div className="section-header">
+                      Passing Limit
+                    </div>
+
+                    <div className="section-value">
+                      {selMap.passingLimit ? 'YES' : 'NO'}
+                    </div>
+
+                  </div>
 
                 </div>
 
-                <div className="section">
-
-                  <div className="section-header">
-                    Route Length
-                  </div>
-
-                  <div className="section-value">
-                    {selMap.routeLength + ' m'}
-                  </div>
-
-                </div>
-
-                <div className="section">
-
-                  <div className="section-header">
-                    Storage Area Amount
-                  </div>
-
-                  <div className="section-value">
-                    {selMap.storageAreas}
-                  </div>
-
-                </div>
-
-                <div className="section">
-
-                  <div className="section-header">
-                    Passing Limit
-                  </div>
-
-                  <div className="section-value">
-                    {selMap.passingLimit ? 'YES' : 'NO'}
-                  </div>
-
-                </div>
+                <Button
+                  id="button-start-game"
+                  text="Start game"
+                  style={{backgroundColor: 'var(--jd-yellow)'}}
+                  handleClick={this.handleButtonClick.bind(this)} />
 
               </div>
+            </TranslateRight>
 
-              <Button
-                id="button-start-game"
-                text="Start game"
-                style={{backgroundColor: 'var(--jd-yellow)'}}
-                handleClick={this.handleButtonClick.bind(this)} />
-
-            </div>
-
-            <div
-              id="right"
-              style={mapImage} >
-
-              <div id="map-name">
-                {selMap.name}
-              </div>
-
+            <TranslateLeft in={this.state.appearAnimation}>
               <div
-                className={firstMap ? 'map-chevron map-chevron-inactive' : 'map-chevron'}
-                id="map-chevron-left"
-                onClick={firstMap ? '' : this.handlePreviousClick.bind(this)} >
+                id="right"
+                style={mapImage} >
 
-                {'<'}
+                <div id="map-name">
+                  {selMap.name}
+                </div>
+
+                <div
+                  className={firstMap ? 'map-chevron map-chevron-inactive' : 'map-chevron'}
+                  id="map-chevron-left"
+                  onClick={firstMap ? '' : this.handlePreviousClick.bind(this)} >
+
+                  {'<'}
+
+                </div>
+
+                <div
+                  className={lastMap ? 'map-chevron map-chevron-inactive' : 'map-chevron'}
+                  id="map-chevron-right"
+                  onClick={lastMap ? '' : this.handleNextClick.bind(this)} >
+
+                  {'>'}
+
+                </div>
 
               </div>
-
-              <div
-                className={lastMap ? 'map-chevron map-chevron-inactive' : 'map-chevron'}
-                id="map-chevron-right"
-                onClick={lastMap ? '' : this.handleNextClick.bind(this)} >
-
-                {'>'}
-
-              </div>
-
-            </div>
+            </TranslateLeft>
 
           </div>
 
-          <div id="bottom-row">
-            {(this.state.selectedMapIndex + 1) + '/' + this.state.maps.length}
-          </div>
+          <TranslateLeft in={this.state.appearAnimation}>
+            <div id="bottom-row">
+              {(this.state.selectedMapIndex + 1) + '/' + this.state.maps.length}
+            </div>
+          </TranslateLeft>
 
         </div>
 
