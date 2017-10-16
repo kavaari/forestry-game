@@ -35,17 +35,18 @@
   max-width: calc(100% - 265px);
   box-shadow: var(--menu-shadow);
   position: relative;
-  /*background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-  transition: 700ms ease;*/
+  background-color: #7da66e; /* color of in-game road */
 }
+
 #fading-content {
   height: 100%;
   width: 100%;
 }
 
-#fading-content img {
+#fading-content #map-image {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
   width: 100%;
   height: 100%;
 }

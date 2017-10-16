@@ -39,7 +39,7 @@ export default class MainMenu extends Component {
 
     var self = this;
     setTimeout(function() {
-      self.props.toggleLogin(username);
+      self.props.login(username);
       self.setState({
         centerElementAnimation: true
       });

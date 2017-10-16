@@ -69,7 +69,8 @@ export default class MapMenu extends Component {
       maps: dummyMaps,
       selectedMapIndex: 0,
       appearAnimation: false,
-      viewAnimation: false
+      viewAnimation: false,
+      scrollAnimationInProgress: false
     }
   }
 
@@ -92,53 +93,63 @@ export default class MapMenu extends Component {
 
   handlePreviousClick() {
 
-    this.setState({
-      viewAnimation: false
-    });
+    if (!this.state.scrollAnimationInProgress) {
+      this.setState({
+        viewAnimation: false,
+        scrollAnimationInProgress: true
+      });
 
-    var self = this;
-    if (this.state.selectedMapIndex === 0) {
-      setTimeout(function() {
-        self.setState({
-          selectedMapIndex: self.state.maps.length - 1,
-          appearAnimation: false,
-          viewAnimation: true
-        });
-      }, 350);
-    } else {
-      setTimeout(function() {
-        self.setState((prevState) => ({
-          selectedMapIndex: prevState.selectedMapIndex - 1,
-          appearAnimation: false,
-          viewAnimation: true
-        }));
-      }, 350);
+      var self = this;
+      if (this.state.selectedMapIndex === 0) {
+        setTimeout(function() {
+          self.setState({
+            selectedMapIndex: self.state.maps.length - 1,
+            appearAnimation: false,
+            viewAnimation: true,
+            scrollAnimationInProgress: false
+          });
+        }, 350);
+      } else {
+        setTimeout(function() {
+          self.setState((prevState) => ({
+            selectedMapIndex: prevState.selectedMapIndex - 1,
+            appearAnimation: false,
+            viewAnimation: true,
+            scrollAnimationInProgress: false
+          }));
+        }, 350);
+      }
     }
   }
 
   handleNextClick() {
 
-    this.setState({
-      viewAnimation: false
-    });
+    if (!this.state.scrollAnimationInProgress) {
+      this.setState({
+        viewAnimation: false,
+        scrollAnimationInProgress: true
+      });
 
-    var self = this;
-    if (this.state.selectedMapIndex === this.state.maps.length - 1) {
-      setTimeout(function() {
-        self.setState({
-          selectedMapIndex: 0,
-          appearAnimation: false,
-          viewAnimation: true
-        });
-      }, 350);
-    } else {
-      setTimeout(function() {
-        self.setState((prevState) => ({
-          selectedMapIndex: prevState.selectedMapIndex + 1,
-          appearAnimation: false,
-          viewAnimation: true
-        }));
-      }, 350);     
+      var self = this;
+      if (this.state.selectedMapIndex === this.state.maps.length - 1) {
+        setTimeout(function() {
+          self.setState({
+            selectedMapIndex: 0,
+            appearAnimation: false,
+            viewAnimation: true,
+            scrollAnimationInProgress: false
+          });
+        }, 350);
+      } else {
+        setTimeout(function() {
+          self.setState((prevState) => ({
+            selectedMapIndex: prevState.selectedMapIndex + 1,
+            appearAnimation: false,
+            viewAnimation: true,
+            scrollAnimationInProgress: false
+          }));
+        }, 350);     
+      }
     }
   }
 
@@ -160,8 +171,6 @@ export default class MapMenu extends Component {
     var mapImage = {
       backgroundImage: 'url(' + selMap.image + ')'
     };
-
-    var imgSrc = selMap.image;
 
     var firstMap = this.state.selectedMapIndex === 0 ? true : false;
     var lastMap = this.state.selectedMapIndex === this.state.maps.length - 1 ? true : false;
@@ -256,7 +265,7 @@ export default class MapMenu extends Component {
                   <div id="map-name">
                     {selMap.name}
                   </div>
-                  <img src={imgSrc} />
+                  <div id="map-image" style={mapImage}></div>
                 </div>
                 </FadeInFadeOut>
 

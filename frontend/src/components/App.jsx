@@ -31,11 +31,11 @@ export default class App extends Component {
     });
   }
 
-  toggleLogin(username) {
-    this.setState((prevState) => ({
-      loggedIn: !prevState.loggedIn,
+  login(username) {
+    this.setState({
+      loggedIn: true,
       username: username
-    }));
+    });
   }
 
   switchView(newView) {
@@ -64,7 +64,7 @@ export default class App extends Component {
           <MainMenu
             switchView={this.switchView.bind(this)}
             loggedIn={this.state.loggedIn}
-            toggleLogin={this.toggleLogin.bind(this)}
+            login={this.login.bind(this)}
             username={this.state.username}
             lang={this.state.lang}
             changeLanguage={this.changeLanguage.bind(this)} />
@@ -76,7 +76,6 @@ export default class App extends Component {
           <MapMenu
             switchView={this.switchView.bind(this)}
             loggedIn={this.state.loggedIn}
-            toggleLogin={this.toggleLogin.bind(this)}
             username={this.state.username}
             lang={this.state.lang} />
         );
@@ -94,7 +93,6 @@ export default class App extends Component {
           <Game 
             switchView={this.switchView.bind(this)}
             loggedIn={this.state.loggedIn}
-            toggleLogin={this.toggleLogin.bind(this)}
             username={username} />
         );
         break;

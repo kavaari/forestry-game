@@ -13,7 +13,8 @@ export default class LoginSignupForm extends Component {
       password: '',
       email: '',
       message: undefined,
-      viewAnimation: true
+      viewAnimation: true,
+      formSwitchAnimationInProgress: false
     }
   }
 
@@ -28,25 +29,29 @@ export default class LoginSignupForm extends Component {
   }
 
   handleSignupLinkClick() {
-    this.setState({
-      viewAnimation: false
-    });
+    if (!this.state.formSwitchAnimationInProgress) {
+      this.setState({
+        viewAnimation: false,
+        formSwitchAnimationInProgress: true
+      });
 
-    var self = this;
-    setTimeout(function() {
-      if (self.state.currentView === 'login') {
-        self.setState({
-          currentView: 'signup',
-          viewAnimation: true
-        });
-      } else {
-        self.setState({
-          currentView: 'login',
-          viewAnimation: true
-        });
-      }
-    }, 350); // Exit animation duration
-    
+      var self = this;
+      setTimeout(function() {
+        if (self.state.currentView === 'login') {
+          self.setState({
+            currentView: 'signup',
+            viewAnimation: true,
+            formSwitchAnimationInProgress: false
+          });
+        } else {
+          self.setState({
+            currentView: 'login',
+            viewAnimation: true,
+            formSwitchAnimationInProgress: false
+          });
+        }
+      }, 350); // Exit animation duration
+    }
   }
 
   handleSubmit(e) {
