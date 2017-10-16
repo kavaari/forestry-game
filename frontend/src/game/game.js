@@ -46,6 +46,8 @@ export default class GameCanvas {
       }
     };
 
+    var self = this;
+
     this.game.stage.hitArea = new PIXI.Rectangle(-1000000, -1000000, 1000000000, 1000000000);    
     
     this.game.stage.interactive = true;
@@ -60,24 +62,25 @@ export default class GameCanvas {
     };
 
     this.game.stage.pointermove = function() {
+
       mouseInput.lastPosition = {x: mouseInput.position.x, y: mouseInput.position.y};
       mouseInput.position = {x: interaction.mouse.global.x, y: interaction.mouse.global.y};
       mouseInput.delta = {x: mouseInput.lastPosition.x - mouseInput.position.x, y: mouseInput.lastPosition.y - mouseInput.position.y};
 
       if (mouseInput.isDown === true) {
-        this.game.stage.pivot.x +=  mouseInput.delta.x / this.game.stage.scale.x
-        this.game.stage.pivot.y +=  mouseInput.delta.y / this.game.stage.scale.y
+        self.game.stage.pivot.x +=  mouseInput.delta.x / self.game.stage.scale.x
+        self.game.stage.pivot.y +=  mouseInput.delta.y / self.game.stage.scale.y
       }
 
     }
     
     var mouseWheelEvent = function(event) {
-      if ((event.wheelDelta < -1 || event.deltaY > 1) && this.game.stage.scale.x > 0.5) {
-        this.game.stage.scale.x -=  0.05;
-        this.game.stage.scale.y -=   0.05;
-      } else if ((event.wheelDelta > 1 || event.deltaY < -1) && this.game.stage.scale.x < 3.0) {
-        this.game.stage.scale.x +=  0.05;
-        this.game.stage.scale.y +=  0.05;
+      if ((event.wheelDelta < -1 || event.deltaY > 1) && self.game.stage.scale.x > 0.5) {
+        self.game.stage.scale.x -=  0.05;
+        self.game.stage.scale.y -=   0.05;
+      } else if ((event.wheelDelta > 1 || event.deltaY < -1) && self.game.stage.scale.x < 3.0) {
+        self.game.stage.scale.x +=  0.05;
+        self.game.stage.scale.y +=  0.05;
       }
     }
     document.getElementById('canvas-game').addEventListener("mousewheel", mouseWheelEvent, false);
