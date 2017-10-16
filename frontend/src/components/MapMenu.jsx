@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Button from './Button';
 import './MapMenu.css';
-import { TranslateRight, TranslateLeft } from './animation';
+import { TranslateRight, TranslateLeft, FadeInFadeOut, Slide } from './animation';
 import './animation.css';
 
 var dummyMaps = [
@@ -68,13 +68,15 @@ export default class MapMenu extends Component {
     this.state = {
       maps: dummyMaps,
       selectedMapIndex: 0,
-      appearAnimation: false
+      appearAnimation: false,
+      viewAnimation: false
     }
   }
 
   componentDidMount() {
     this.setState({
-      appearAnimation: true
+      appearAnimation: true,
+      viewAnimation: true
     });
   }
 
@@ -89,34 +91,55 @@ export default class MapMenu extends Component {
   }
 
   handlePreviousClick() {
+
+    this.setState({
+      viewAnimation: false
+    });
+
+    var self = this;
     if (this.state.selectedMapIndex === 0) {
-
-      this.setState({
-        selectedMapIndex: this.state.maps.length - 1
-      });
-    
+      setTimeout(function() {
+        self.setState({
+          selectedMapIndex: self.state.maps.length - 1,
+          appearAnimation: false,
+          viewAnimation: true
+        });
+      }, 350);
     } else {
-
-      this.setState((prevState) => ({
-        selectedMapIndex: prevState.selectedMapIndex - 1
-      }));
+      setTimeout(function() {
+        self.setState((prevState) => ({
+          selectedMapIndex: prevState.selectedMapIndex - 1,
+          appearAnimation: false,
+          viewAnimation: true
+        }));
+      }, 350);
     }
   }
 
   handleNextClick() {
+
+    this.setState({
+      viewAnimation: false
+    });
+
+    var self = this;
     if (this.state.selectedMapIndex === this.state.maps.length - 1) {
-
-      this.setState({
-        selectedMapIndex: 0
-      });
-    
+      setTimeout(function() {
+        self.setState({
+          selectedMapIndex: 0,
+          appearAnimation: false,
+          viewAnimation: true
+        });
+      }, 350);
     } else {
-
-      this.setState((prevState) => ({
-        selectedMapIndex: prevState.selectedMapIndex + 1
-      }));
+      setTimeout(function() {
+        self.setState((prevState) => ({
+          selectedMapIndex: prevState.selectedMapIndex + 1,
+          appearAnimation: false,
+          viewAnimation: true
+        }));
+      }, 350);     
     }
-
   }
 
   render() {
@@ -137,6 +160,8 @@ export default class MapMenu extends Component {
     var mapImage = {
       backgroundImage: 'url(' + selMap.image + ')'
     };
+
+    var imgSrc = selMap.image;
 
     var firstMap = this.state.selectedMapIndex === 0 ? true : false;
     var lastMap = this.state.selectedMapIndex === this.state.maps.length - 1 ? true : false;
@@ -222,13 +247,18 @@ export default class MapMenu extends Component {
             </TranslateRight>
 
             <TranslateLeft in={this.state.appearAnimation}>
-              <div
-                id="right"
-                style={mapImage} >
+            
+            
+              <div id="right">
 
-                <div id="map-name">
-                  {selMap.name}
+                <FadeInFadeOut in={this.state.viewAnimation}>
+                <div id="fading-content">
+                  <div id="map-name">
+                    {selMap.name}
+                  </div>
+                  <img src={imgSrc} />
                 </div>
+                </FadeInFadeOut>
 
                 <div
                   className={firstMap ? 'map-chevron map-chevron-inactive' : 'map-chevron'}
@@ -249,6 +279,7 @@ export default class MapMenu extends Component {
                 </div>
 
               </div>
+            
             </TranslateLeft>
 
           </div>
