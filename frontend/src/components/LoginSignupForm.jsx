@@ -3,6 +3,8 @@ import Button from './Button';
 import './LoginSignupForm.css';
 import { FadeInFadeOut, TranslateDown } from './animation';
 import './animation.css';
+import './api';
+
 
 export default class LoginSignupForm extends Component {
   constructor(props) {
@@ -16,6 +18,12 @@ export default class LoginSignupForm extends Component {
       viewAnimation: true,
       formSwitchAnimationInProgress: false
     }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      message: nextProps.message
+    });
   }
 
   handleInputChange(e) {
@@ -56,7 +64,7 @@ export default class LoginSignupForm extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    this.props.handleClick(this.state.username);
+    this.props.handleClick(this.state.username, this.state.password);
   }
 
   render() {
@@ -89,7 +97,7 @@ export default class LoginSignupForm extends Component {
           id="button-sign-up"
           text="Sign up"
           style={buttonStyle}
-          handleClick={() => this.props.handleClick(this.state.username)} />
+          handleClick={() => this.props.handleClick(this.state.username, this.state.password)} />
       );
 
     } else {
@@ -99,7 +107,7 @@ export default class LoginSignupForm extends Component {
           id="button-log-in"
           text="Log in"
           style={buttonStyle}
-          handleClick={() => this.props.handleClick(this.state.username)} />
+          handleClick={() => this.props.handleClick(this.state.username, this.state.password)} />
       );
     }
 

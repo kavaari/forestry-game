@@ -5,13 +5,15 @@ import LoginSignupForm from './LoginSignupForm';
 import './MainMenu.css';
 import { FadeInFadeOut, TranslateDown, TranslateRight, TranslateLeft } from './animation';
 import './animation.css';
+import { login } from './api'
 
 export default class MainMenu extends Component {
   constructor(props) {
     super(props);
     this.state = {
       appearAnimation: false,
-      centerElementAnimation: true
+      centerElementAnimation: true,
+      formMsg: undefined
     }
   }
 
@@ -29,22 +31,31 @@ export default class MainMenu extends Component {
     }
   }
 
-  handleFormClick(username) {
+  handleFormClick(username, password) {
     // Set loggedIn for testing purposes
     // TODO: connect to backend
-
     this.setState({
-      centerElementAnimation: false
+      formMsg: undefined
     });
-
     var self = this;
-    setTimeout(function() {
-      self.props.login(username);
-      self.setState({
-        centerElementAnimation: true
-      });
-    }, 350) // Exit animation duration
-    
+    login(username, password, (message) => function() {
+      if (message) {
+        self.setState({
+          formMsg: message
+        });
+      } else {
+        self.setState({
+          centerElementAnimation: false
+        });
+
+        setTimeout(function() {
+          self.props.login(username);
+          self.setState({
+            centerElementAnimation: true
+          });
+        }, 350) // Exit animation duration
+      }
+    });   
   }
 
   render() {
@@ -83,7 +94,7 @@ export default class MainMenu extends Component {
 
     } else {
 
-      centerElement = <LoginSignupForm handleClick={this.handleFormClick.bind(this)} />;
+      centerElement = <LoginSignupForm message={this.state.formMsg} handleClick={this.handleFormClick.bind(this)} />;
       startButtonText = 'Play as guest';
     }
 
