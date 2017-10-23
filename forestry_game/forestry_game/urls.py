@@ -29,6 +29,7 @@ urlpatterns = [
     url(r'^api/v1/user/', UserCreateView.as_view(), name="create" ),
     url(r'^api/v1/level/', LevelCreateView.as_view(), name="create" ),
     url(r'^api/v1/report/', ReportCreateView.as_view(), name="create" ),
+    url(r'^api/v1/csrf/', views.csrf),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
