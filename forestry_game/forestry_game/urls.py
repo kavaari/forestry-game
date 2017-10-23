@@ -17,8 +17,18 @@ from django.conf.urls import url
 from django.contrib import admin
 
 from forestry_game import views
+from rest_framework.urlpatterns import format_suffix_patterns
+from .views import UserCreateView, LevelCreateView, ReportCreateView
 
 urlpatterns = [
-    # url(r'^admin/', admin.site.urls),
+	#Admin urls
+    url(r'^admin/', admin.site.urls),
+    #Main urls
     url(r'^$', views.home ),
+    #Api urls
+    url(r'^api/v1/user/', UserCreateView.as_view(), name="create" ),
+    url(r'^api/v1/level/', LevelCreateView.as_view(), name="create" ),
+    url(r'^api/v1/report/', ReportCreateView.as_view(), name="create" ),
 ]
+
+urlpatterns = format_suffix_patterns(urlpatterns)

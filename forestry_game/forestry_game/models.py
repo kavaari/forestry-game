@@ -11,9 +11,10 @@ class CustomUser(models.Model):
 
 # actual map in the game
 class Level(models.Model):
-    name = models.CharField(default="")
+    name = models.CharField(default="", max_length=30)
     timestamp = models.DateTimeField(auto_now_add=True)
     last_edited = models.DateTimeField(auto_now=True)
+    mapdata = models.TextField(default="")
     creator = models.ForeignKey(CustomUser)
 
     def __str__(self):
