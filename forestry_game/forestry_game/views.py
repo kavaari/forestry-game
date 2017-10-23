@@ -1,14 +1,19 @@
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import ensure_csrf_cookie
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.permissions import IsAuthenticated
 
-from forestry_game.models import CustomUser, Level, Report
-from forestry_game.serializers import CustomUserSerializer, LevelSerializer, ReportSerializer
+from django.contrib.auth.models import User
+from forestry_game.models import Level, Report
+from forestry_game.serializers import LevelSerializer, ReportSerializer, UserSerializer
 from rest_framework import generics
 
+
+
 class UserCreateView(generics.ListCreateAPIView):
-	queryset = Level.objects.all()
-	serializer_class = LevelSerializer
+	queryset = User.objects.all()
+	serializer_class = UserSerializer
 	print(serializer_class)
 
 	def create_user(self, serializer):
@@ -37,3 +42,6 @@ def csrf( request ):
 def home ( request ):
     context = dict()
     return render(request, 'index.html', context)
+
+def register( request ):
+		request

@@ -1,21 +1,13 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-# custom user for additional stuff later
-class CustomUser(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, unique=True)
-    # django model prvides username, password and email
-
-    def __str__(self):
-        return self.user.username
-
 # actual map in the game
 class Level(models.Model):
     name = models.CharField(default="", max_length=30)
     timestamp = models.DateTimeField(auto_now_add=True)
     last_edited = models.DateTimeField(auto_now=True)
     mapdata = models.TextField(default="")
-    creator = models.ForeignKey(CustomUser)
+    creator = models.ForeignKey(User)
 
     def __str__(self):
         return self.name + ' - ' + self.creator + ' - ' + str(self.pk)
@@ -27,7 +19,7 @@ class Report(models.Model):
     gas_consumption = models.IntegerField(default=0)
     duration = models.IntegerField(default=0)
     logs = models.TextField(default="")
-    user = models.ForeignKey(CustomUser)
+    user = models.ForeignKey(User)
     level = models.ForeignKey(Level)
 
     def score(self):

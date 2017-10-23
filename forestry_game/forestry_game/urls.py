@@ -25,6 +25,8 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     #Main urls
     url(r'^$', views.home ),
+    #Authentication
+    url(r'^register/', views.register),
     #Api urls
     url(r'^api/v1/user/', UserCreateView.as_view(), name="create" ),
     url(r'^api/v1/level/', LevelCreateView.as_view(), name="create" ),
