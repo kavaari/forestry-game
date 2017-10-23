@@ -10,15 +10,27 @@ class CustomUser(models.Model):
         return self.user.username
 
 # actual map in the game
-class Map(models.Model):
-    height = models.IntegerField(default=0)
-    width = models.IntegerField(default=0)
+class Level(models.Model):
+    name = models.CharField(default="")
+    timestamp = models.DateTimeField(auto_now_add=True)
+    last_edited = models.DateTimeField(auto_now=True)
+    creator = models.ForeignKey(CustomUser)
 
-    # model is missing graph information and other stuff (will be defined later)
+    def __str__(self):
+        return self.name + ' - ' + self.creator + ' - ' + str(self.pk)
 
 # result from a single run in the game
-class Execution(models.Model):
+class Report(models.Model):
     timestamp = models.DateTimeField(auto_now=True)
-    score = models.IntegerField(default=0)
+    distance = models.IntegerField(default=0)
+    gas_consumption = models.IntegerField(default=0)
+    duration = models.IntegerField(default=0)
+    logs = models.TextField(default="")
     user = models.ForeignKey(CustomUser)
-    map = models.ForeignKey(Map)
+    level = models.ForeignKey(Level)
+
+    def score(self):
+        return self.distance * self.gas_consumption * self.duration
+
+    def __str__(self):
+        return self.user.username + ' - ' + self.score + ' - ' + str(self.pk)
