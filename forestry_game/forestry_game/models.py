@@ -7,10 +7,12 @@ class Level(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     last_edited = models.DateTimeField(auto_now=True)
     mapdata = models.TextField(default="")
+    mapinfo = models.TextField(default="")
     creator = models.ForeignKey(User)
 
     def __str__(self):
-        return self.name + ' - ' + self.creator + ' - ' + str(self.pk)
+        return self.name + ' - ' + self.creator.username + ' - ' + str(self.pk)
+
 
 # result from a single run in the game
 class Report(models.Model):
@@ -26,4 +28,4 @@ class Report(models.Model):
         return self.distance * self.gas_consumption * self.duration
 
     def __str__(self):
-        return self.user.username + ' - ' + self.score + ' - ' + str(self.pk)
+        return self.user.username + ' - ' + str(self.score()) + ' - ' + str(self.pk)

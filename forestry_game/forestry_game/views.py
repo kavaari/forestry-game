@@ -8,8 +8,11 @@ from django.contrib.auth import authenticate, login, logout as django_logout
 
 from django.contrib.auth.models import User
 from forestry_game.models import Level, Report
-from forestry_game.serializers import LevelSerializer, ReportSerializer, RegisterSerializer, LoginSerializer
+#from forestry_game.serializers import LevelSerializer, MapInfoSerializer, MapDataSerializer, ReportSerializer, RegisterSerializer, LoginSerializer
+from forestry_game.serializers import *
 from rest_framework import generics
+
+import json
 
 
 
@@ -46,13 +49,32 @@ class LoginView(generics.ListCreateAPIView):
 				'email': user.email
 			}, safe=False)
 
-class LevelCreateView(generics.ListCreateAPIView):
-	queryset = Level.objects.all()
+class LevelView(generics.ListCreateAPIView):
+	permission_classes = (AllowAny,)
 	serializer_class = LevelSerializer
-	print(serializer_class)
 
-	def create_level(self, serializer):
-		serializer.save()
+	def get_queryset(self):
+		queryset = Level.objects.all()
+		if self.request.method == 'GET':
+			id = self.request.query_params.get('id', None)
+			if id is not None:
+				queryset = Level.objects.filter(pk = id)
+		return queryset
+
+	def get(self, request, *args, **kwargs):
+		
+		if request.GET.get('id', False):
+			self.serializer_class = MapDataSerializer
+		else:
+			self.serializer_class = MapInfoSerializer
+		
+		response = self.list(request, *args, **kwargs)
+		for row in response.data:
+			if 'mapinfo' in row:
+				row['mapinfo'] = json.loads(row['mapinfo'])
+			if 'mapdata' in row:
+				row['mapdata'] = json.loads(row['mapdata'])
+		return response
 
 class ReportCreateView(generics.ListCreateAPIView):
 	queryset = Level.objects.all()

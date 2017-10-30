@@ -20,10 +20,21 @@ class LoginSerializer(serializers.ModelSerializer):
 		model = User 
 		fields = ('id', 'username', 'email', 'password')
 
+# LEVELSERIALIZER NOT IN USE RIGHT NOW
 class LevelSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Level
-		fields = ('id', 'name', 'timestamp', 'last_edited', 'mapdata', 'creator')
+		fields = ('id', 'name', 'timestamp', 'last_edited', 'mapdata', 'mapinfo', 'creator')
+
+class MapInfoSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Level
+		fields = ('id', 'name', 'mapinfo')
+
+class MapDataSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Level
+		fields = ('id', 'name', 'mapdata')
 
 class ReportSerializer(serializers.ModelSerializer):
 	class Meta:
