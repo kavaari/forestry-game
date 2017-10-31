@@ -76,13 +76,34 @@ class LevelView(generics.ListCreateAPIView):
 				row['mapdata'] = json.loads(row['mapdata'])
 		return response
 
-class ReportCreateView(generics.ListCreateAPIView):
-	queryset = Level.objects.all()
-	serializer_class = LevelSerializer
-	print(serializer_class)
+class ReportView(generics.ListCreateAPIView):
+	permission_classes = (AllowAny,)
+	serializer_class = ReportSerializer
 
-	def create_report(self, serializer):
-		serializer.save()
+	def get_queryset(self):
+		queryset = Report.objects.all()
+		if self.request.method == 'GET':
+			id = self.request.query_params.get('n', None)
+			if id is not None:
+				queryset = Report.objects.filter(pk = id)
+		return queryset
+
+	def get(self, request, *args, **kwargs):
+		response = self.list(request, *args, **kwargs)
+		for row in response.data:
+			if 'logs' in row:
+				row['logs'] = json.loads(row['logs'])
+		return response
+
+class ScoresView(generics.ListCreateAPIView):
+	permission_classes = (AllowAny,)
+	serializer_class = ScoreSerializer
+
+	def get_queryset(self):
+		queryset = Report.objects.filter(user = self.request.user)
+		return queryset
+
+	
 
 @permission_classes((IsAuthenticated,))
 def logoutView(request):

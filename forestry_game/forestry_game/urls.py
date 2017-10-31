@@ -18,7 +18,7 @@ from django.contrib import admin
 
 from forestry_game import views
 from rest_framework.urlpatterns import format_suffix_patterns
-from .views import RegisterView, LoginView, LevelView, ReportCreateView
+from .views import RegisterView, LoginView, LevelView, ReportView, ScoresView
 from django.contrib.auth.models import User
 from forestry_game.serializers import LevelSerializer, ReportSerializer, RegisterSerializer, LoginSerializer
 
@@ -34,7 +34,8 @@ urlpatterns = [
     url(r'^api/v1/auth/login', LoginView.as_view(), name="login" ),
     url(r'^api/v1/auth/logout', views.logoutView, name="logout" ),
     url(r'^api/v1/level/', LevelView.as_view(), name="level" ),
-    url(r'^api/v1/report/', ReportCreateView.as_view(), name="report" ),
+    url(r'^api/v1/report/', ReportView.as_view(), name="report" ),
+    url(r'^api/v1/scores/', ScoresView.as_view(), name="report" ),
     url(r'^api/v1/validate/', views.validate),
 ]
 
