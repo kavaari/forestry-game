@@ -67,7 +67,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'forestry_game.forestry_game.urls'
+ROOT_URLCONF = 'forestry_game.urls'
 
 TEMPLATES = [
     {

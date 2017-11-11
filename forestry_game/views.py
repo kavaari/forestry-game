@@ -7,8 +7,8 @@ from rest_framework.decorators import permission_classes
 from django.contrib.auth import authenticate, login, logout as django_logout
 
 from django.contrib.auth.models import User
-from forestry_game.forestry_game.models import Level, Report
-from forestry_game.forestry_game.serializers import LevelSerializer, ReportSerializer, RegisterSerializer, LoginSerializer
+from forestry_game.models import Level, Report
+from forestry_game.serializers import LevelSerializer, ReportSerializer, RegisterSerializer, LoginSerializer
 from rest_framework import generics
 
 

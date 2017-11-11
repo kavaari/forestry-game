@@ -16,11 +16,11 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 
-from forestry_game.forestry_game import views
+from forestry_game import views
 from rest_framework.urlpatterns import format_suffix_patterns
 from .views import RegisterView, LoginView, LevelCreateView, ReportCreateView
 from django.contrib.auth.models import User
-from forestry_game.forestry_game.serializers import LevelSerializer, ReportSerializer, RegisterSerializer, LoginSerializer
+from forestry_game.serializers import LevelSerializer, ReportSerializer, RegisterSerializer, LoginSerializer
 
 urlpatterns = [
 	#Admin urls

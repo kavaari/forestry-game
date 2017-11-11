@@ -1,4 +1,4 @@
-from forestry_game.forestry_game.models import Level, Report
+from forestry_game.models import Level, Report
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
