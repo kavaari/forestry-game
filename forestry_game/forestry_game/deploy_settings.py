@@ -67,7 +67,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'forestry_game.urls'
+ROOT_URLCONF = 'forestry_game.forestry_game.urls'
 
 TEMPLATES = [
     {
@@ -145,8 +145,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-#PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-PROJECT_ROOT = BASE_DIR
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+#PROJECT_ROOT = BASE_DIR
 
 STATIC_ROOT = os.path.join(PROJECT_ROOT, "static", "static_root")
 
