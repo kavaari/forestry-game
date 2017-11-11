@@ -25,7 +25,7 @@ SECRET_KEY = '=*$j%1gna+opauu!7qbk5p@p%p8wlqw#$ypp%tmp(!x#aj5t8d'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'forestry-game.herokuapp.com']
 
 
 # Application definition
