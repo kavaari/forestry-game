@@ -24,6 +24,7 @@ SECRET_KEY = '=*$j%1gna+opauu!7qbk5p@p%p8wlqw#$ypp%tmp(!x#aj5t8d'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+USE_LOCAL_DATABASE = False
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'forestry-game-backend.herokuapp.com', 'forestry-game.herokuapp.com']
 
@@ -93,18 +94,20 @@ WSGI_APPLICATION = 'forestry_game.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+if (USE_LOCAL_DATABASE):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
     }
-}
+else:
+    # Update database configuration with $DATABASE_URL.
+    import dj_database_url
+    db_from_env = dj_database_url.config()
+    DATABASES['default'].update(db_from_env)
 
-# Update database configuration with $DATABASE_URL.
-import dj_database_url
-db_from_env = dj_database_url.config()
-DATABASES['default'].update(db_from_env)
+
 
 
 # Password validation
