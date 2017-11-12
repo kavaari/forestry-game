@@ -107,6 +107,7 @@ else:
     db_from_env = dj_database_url.config()
     DATABASES = {
         'default': {
+            'ENGINE': 'django.db.backends.postgresql',
         }
     }
     DATABASES['default'].update(db_from_env)
