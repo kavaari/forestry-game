@@ -5,7 +5,7 @@ from rest_framework import serializers
 class RegisterSerializer(serializers.ModelSerializer):
 
 	class Meta:
-		model = User 
+		model = User
 		fields = ('id', 'username', 'password', 'email')
 
 	def create(self, validated_data):
@@ -17,7 +17,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 class LoginSerializer(serializers.ModelSerializer):
 
 	class Meta:
-		model = User 
+		model = User
 		fields = ('id', 'username', 'email', 'password')
 
 # LEVELSERIALIZER NOT IN USE RIGHT NOW
