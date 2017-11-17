@@ -32,8 +32,8 @@ ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'forestry-game-backend.herokuapp.com'
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
     'django.contrib.auth',
+    'django.contrib.admin',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
