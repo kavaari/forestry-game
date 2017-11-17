@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '=*$j%1gna+opauu!7qbk5p@p%p8wlqw#$ypp%tmp(!x#aj5t8d'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 USE_LOCAL_DATABASE = False
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'forestry-game-backend.herokuapp.com', 'forestry-game.herokuapp.com']
