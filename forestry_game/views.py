@@ -83,9 +83,12 @@ class ReportView(generics.ListCreateAPIView):
 	def get_queryset(self):
 		queryset = Report.objects.all()
 		if self.request.method == 'GET':
-			id = self.request.query_params.get('n', None)
-			if id is not None:
-				queryset = Report.objects.filter(pk = id)
+			if not self.request.user.is_superuser:
+				id = self.request.query_params.get('n', None)
+				if id is not None:
+					queryset = Report.objects.filter(pk = id)
+				elif self.request.user.is_authenticated():
+					queryset = Report.objects.filter(user = self.request.user).order_by('-timestamp')
 		return queryset
 
 	def get(self, request, *args, **kwargs):
@@ -94,16 +97,6 @@ class ReportView(generics.ListCreateAPIView):
 			if 'logs' in row:
 				row['logs'] = json.loads(row['logs'])
 		return response
-
-class ScoresView(generics.ListCreateAPIView):
-	permission_classes = (AllowAny,)
-	serializer_class = ScoreSerializer
-
-	def get_queryset(self):
-		queryset = Report.objects.filter(user = self.request.user)
-		return queryset
-
-	
 
 @permission_classes((IsAuthenticated,))
 def logoutView(request):
