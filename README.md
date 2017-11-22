@@ -9,9 +9,10 @@ Django setup
 3. python manage.py makemigrations (prepares database model changes)
 3b. python manage.py makemigrations forestry_game
 4. python manage.py migrate (executes database changes)
-5. python manage.py collectstatic (probably not necessary untill deployment)
-6. python manage.py runserver 8080
-7. Goto localhost:8080 (and hope it works)
+5. Create maps and users for testing python manage.py init_data
+6. python manage.py collectstatic (probably not necessary untill deployment)
+7. python manage.py runserver 8080
+8. Goto localhost:8080 (and hope it works)
 
 Questions and undecided stuff
 
