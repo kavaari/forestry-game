@@ -36,6 +36,8 @@ urlpatterns = [
     url(r'^api/v1/level/', LevelView.as_view(), name="level" ),
     url(r'^api/v1/report/', ReportView.as_view(), name="report" ),
     url(r'^api/v1/validate/', views.validate),
+    #Image url
+    url(r'^levelimage/(?P<id>\d+).svg$', views.levelImageView, name="levelimage" ),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

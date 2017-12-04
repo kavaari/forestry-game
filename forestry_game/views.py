@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import ensure_csrf_cookie
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
@@ -14,6 +14,7 @@ from rest_framework import generics
 
 import json
 
+from .svg import generateSVG
 
 
 class RegisterView(generics.ListCreateAPIView):
@@ -119,3 +120,13 @@ def validate( request ):
 def home ( request ):
     context = dict()
     return render(request, 'index.html', context)
+
+def levelImageView(request, id):
+	level = get_object_or_404(Level, pk=id)
+	mapdata = json.loads(level.mapdata)
+	mapImage = generateSVG(mapdata)
+
+	response = HttpResponse(mapImage)
+	response['Content-Type'] = 'image/svg+xml'
+
+	return response
