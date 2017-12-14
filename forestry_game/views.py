@@ -111,7 +111,7 @@ class LevelView(generics.ListCreateAPIView):
 			level = Level()
 			level.name = request.POST['levelName']
 			level.mapdata = request.POST['mapData']
-			level.mapinfo = request.POST['mapInfo'];
+			level.mapinfo = request.POST['mapInfo']
 			level.creator = request.user
 			level.save()
 			return HttpResponse(status=200)

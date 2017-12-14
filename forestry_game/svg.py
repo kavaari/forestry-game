@@ -1,3 +1,4 @@
+import math
 def generateSVG(mapdata):
   svg = ''
 
@@ -68,17 +69,24 @@ def generateSVG(mapdata):
   # Draw logs
   for log in mapdata['logs']:
     logColor = logColorByType[log['type']]
+    if not 'rot' in log:
+      log['rot'] = 0
+
     svg += ('<path d="M' +
     str(log['x'] + xOff - 25) + ' ' +
     str(log['y'] + yOff) +' L' +
     str(log['x'] + xOff + 25) + ' ' +
-    str(log['y'] + yOff) + '" stroke="' + logColor + '" stroke-width="5" />')
+    str(log['y'] + yOff) + '" stroke="' + logColor + '" stroke-width="5" ' + 
+    'transform="rotate(' + str(math.degrees(log['rot']))  + ' ' + str(log['x'] + xOff) + ' ' + str(log['y'] + yOff) + ')" />')
 
   # Draw log deposits
   for logdeposit in mapdata['logdeposits']:
+    if not 'rot' in logdeposit:
+      logdeposit['rot'] = 0
     svg += ('<rect width="150" height="50" style="fill:#5e411c" x="' +
     str(logdeposit['x'] + xOff - 75) + '" y="' +
-    str(logdeposit['y'] + yOff - 25) + '" />')
+    str(logdeposit['y'] + yOff - 25) + '" '+
+    'transform="rotate(' + str(math.degrees(logdeposit['rot']))  + ' ' + str(logdeposit['x'] + xOff) + ' ' + str(logdeposit['y'] + yOff) + ')" />')
 
   # Draw startpoint
   svg += ('<circle r="15" fill="#FFDE00" stroke="#000000" stroke-width="2" cx="' +
