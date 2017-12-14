@@ -106,6 +106,17 @@ class LevelView(generics.ListCreateAPIView):
 				row['mapdata'] = json.loads(row['mapdata'])
 		return response
 
+	def post(self, request):
+		if request.user.is_authenticated():
+			level = Level()
+			level.name = request.POST['levelName']
+			level.mapdata = request.POST['mapData']
+			level.mapinfo = request.POST['mapInfo'];
+			level.creator = request.user
+			level.save()
+			return HttpResponse(status=200)
+		return HttpResponse(status=403)
+
 class ReportView(generics.ListCreateAPIView):
 	permission_classes = (AllowAny,)
 	serializer_class = ReportSerializer
