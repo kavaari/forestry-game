@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import ensure_csrf_cookie
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
@@ -14,6 +14,8 @@ from rest_framework import generics
 
 import json
 
+from .forms import RegisterForm
+from .svg import generateSVG
 
 
 class RegisterView(generics.ListCreateAPIView):
@@ -21,17 +23,45 @@ class RegisterView(generics.ListCreateAPIView):
 	serializer_class = RegisterSerializer
 
 	def post(self, request, *args, **kwargs):
-		#TODO: Check if user creation fails and handle it properly
-		self.create(request, *args, **kwargs)
-		user = authenticate(username = request.POST['username'], password = request.POST['password'])
-		if user is None:
-			return HttpResponse(status=401)
+		form = RegisterForm(request.POST)
+		if form.is_valid():
+			self.create(request, *args, **kwargs)
+			user = authenticate(username = form.cleaned_data['username'], password = form.cleaned_data['password'])
+			if user is None:
+				return HttpResponse(status=401)
+			else:
+				login(request, user)
+				return JsonResponse({
+					'username': user.username,
+					'email': user.email
+				}, safe=False)
 		else:
-			login(request, user)
-			return JsonResponse({
-				'username': user.username,
-				'email': user.email
-			}, safe=False)
+			formErrors = form.errors.as_data()
+			errors = []
+			if 'username' in formErrors:
+				for err in formErrors['username']:
+					if 'This field is required.' in err.messages[0]:
+						errors.append('usernameRequired')
+					if 'Ensure this value has at least' in err.messages[0]:
+						errors.append('usernameTooShort')
+					if 'Ensure this value has at most' in err.messages[0]:
+						errors.append('usernameTooLong')
+			if 'email' in formErrors:
+				for err in formErrors['email']:
+					if 'This field is required.' in err.messages[0]:
+						errors.append('emailRequired')
+					if 'Enter a valid email address.' in err.messages[0]:
+						errors.append('emailInvalid')
+			if 'password' in formErrors:
+				for err in formErrors['password']:
+					if 'This field is required.' in err.messages[0]:
+						errors.append('passwordRequired')
+					if 'Ensure this value has at least' in err.messages[0]:
+						errors.append('passwordTooShort')
+					if 'Ensure this value has at most' in err.messages[0]:
+						errors.append('passwordTooLong')			
+			
+			return JsonResponse(errors, safe=False, status=400)
 
 class LoginView(generics.ListCreateAPIView):
 	permission_classes = (AllowAny,)
@@ -76,6 +106,17 @@ class LevelView(generics.ListCreateAPIView):
 				row['mapdata'] = json.loads(row['mapdata'])
 		return response
 
+	def post(self, request):
+		if request.user.is_authenticated():
+			level = Level()
+			level.name = request.POST['levelName']
+			level.mapdata = request.POST['mapData']
+			level.mapinfo = request.POST['mapInfo']
+			level.creator = request.user
+			level.save()
+			return HttpResponse(status=200)
+		return HttpResponse(status=403)
+
 class ReportView(generics.ListCreateAPIView):
 	permission_classes = (AllowAny,)
 	serializer_class = ReportSerializer
@@ -119,3 +160,13 @@ def validate( request ):
 def home ( request ):
     context = dict()
     return render(request, 'index.html', context)
+
+def levelImageView(request, id):
+	level = get_object_or_404(Level, pk=id)
+	mapdata = json.loads(level.mapdata)
+	mapImage = generateSVG(mapdata)
+
+	response = HttpResponse(mapImage)
+	response['Content-Type'] = 'image/svg+xml'
+
+	return response
