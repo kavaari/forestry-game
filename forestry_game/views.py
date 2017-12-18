@@ -139,6 +139,20 @@ class ReportView(generics.ListCreateAPIView):
 				row['logs'] = json.loads(row['logs'])
 		return response
 
+	def post(self, request):
+		if request.user.is_authenticated():
+			report = Report()
+			report.distance = request.POST['distance']
+			report.timestamp = request.POST['enddate']
+			report.gas_consumption = request.POST['fuel']
+			report.duration = request.POST['time']
+			report.logs = request.POST['logs']
+			report.user = request.user
+			report.level = get_object_or_404(Level, pk=request.POST['id'])
+			report.save()
+			return HttpResponse(status=200)
+		return HttpResponse(status=403)
+
 @permission_classes((IsAuthenticated,))
 def logoutView(request):
 	django_logout(request)
