@@ -3,7 +3,7 @@ def generateSVG(mapdata):
   svg = ''
 
   # Find smallest and largest x and y values and set offsets and dimensions
-  xMin, yMin, xMax, yMax = 0, 0, 0, 0
+  xMin, yMin, xMax, yMax = float('inf'), float('inf'), -float('inf'), -float('inf')
   # Give the result image some padding
   padding = 100
 
