@@ -39,7 +39,7 @@ class MapDataSerializer(serializers.ModelSerializer):
 class ReportSerializer(serializers.ModelSerializer):
 	user = serializers.CharField(source='user.username', read_only=True)
 	level = serializers.CharField(source='level.name', read_only=True)
-	m_score = serializers.IntegerField(source='score', read_only=True)
+	m_score = serializers.CharField(source='score', read_only=True)
 	class Meta:
 		model = Report
 		fields = ('id', 'timestamp', 'distance', 'gas_consumption', 'duration', 'logs', 'user', 'level', 'm_score')

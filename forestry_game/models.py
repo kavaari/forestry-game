@@ -18,14 +18,17 @@ class Level(models.Model):
 class Report(models.Model):
     timestamp = models.DateTimeField(auto_now=True)
     distance = models.IntegerField(default=0)
-    gas_consumption = models.IntegerField(default=0)
+    gas_consumption = models.FloatField(default=0)
     duration = models.IntegerField(default=0)
     logs = models.TextField(default="")
     user = models.ForeignKey(User)
     level = models.ForeignKey(Level)
 
     def score(self):
-        return self.distance * self.gas_consumption * self.duration
+        salary = 15/3600*self.duration
+        gas_price = 1.5*self.gas_consumption
+
+        return str("%0.2f" % (salary + gas_price))
 
     def __str__(self):
         return self.user.username + ' - ' + str(self.score()) + ' - ' + str(self.pk)
