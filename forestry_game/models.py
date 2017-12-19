@@ -25,8 +25,12 @@ class Report(models.Model):
     level = models.ForeignKey(Level)
 
     def score(self):
-        salary = 15/3600*self.duration
-        gas_price = 1.5*self.gas_consumption
+        SALARY = 20
+        DIESEL_PRICE = 1.2
+        HOUR = 3600
+        
+        salary = SALARY / HOUR * self.duration
+        gas_price = DIESEL_PRICE * self.gas_consumption
 
         return str("%0.2f" % (salary + gas_price))
 
