@@ -59,8 +59,8 @@ class RegisterView(generics.ListCreateAPIView):
 					if 'Ensure this value has at least' in err.messages[0]:
 						errors.append('passwordTooShort')
 					if 'Ensure this value has at most' in err.messages[0]:
-						errors.append('passwordTooLong')			
-			
+						errors.append('passwordTooLong')
+
 			return JsonResponse(errors, safe=False, status=400)
 
 class LoginView(generics.ListCreateAPIView):
@@ -92,12 +92,12 @@ class LevelView(generics.ListCreateAPIView):
 		return queryset
 
 	def get(self, request, *args, **kwargs):
-		
+
 		if request.GET.get('id', False):
 			self.serializer_class = MapDataSerializer
 		else:
 			self.serializer_class = MapInfoSerializer
-		
+
 		response = self.list(request, *args, **kwargs)
 		for row in response.data:
 			if 'mapinfo' in row:
