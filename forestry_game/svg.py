@@ -81,9 +81,12 @@ def generateSVG(mapdata):
 
   # Draw log deposits
   for logdeposit in mapdata['logdeposits']:
+    depositColor = '#333333'
+    if 'type' in logdeposit:
+      depositColor = logColorByType[logdeposit['type']]
     if not 'rot' in logdeposit:
       logdeposit['rot'] = 0
-    svg += ('<rect width="150" height="50" style="fill:#5e411c" x="' +
+    svg += ('<rect width="150" height="50" style="fill:' + depositColor + '" x="' +
     str(logdeposit['x'] + xOff - 75) + '" y="' +
     str(logdeposit['y'] + yOff - 25) + '" '+
     'transform="rotate(' + str(math.degrees(logdeposit['rot']))  + ' ' + str(logdeposit['x'] + xOff) + ' ' + str(logdeposit['y'] + yOff) + ')" />')
