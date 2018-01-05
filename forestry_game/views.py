@@ -121,7 +121,25 @@ class LevelView(generics.ListCreateAPIView):
 			level.mapinfo = request.POST['mapInfo']
 			level.creator = request.user
 			level.save()
-			return HttpResponse(status=200)
+			return JsonResponse({
+				'id': level.pk
+			}, safe=False)
+		return HttpResponse(status=403)
+
+class LevelUpdateView(generics.ListCreateAPIView):
+	permission_classes = (IsAuthenticated,)
+	serializer_class = LevelSerializer
+
+	def post(self, request):
+		if request.user.is_authenticated():
+			level = get_object_or_404(Level, pk=request.POST['id'])
+			level.mapdata = request.POST['mapData']
+			level.mapinfo = request.POST['mapInfo']
+			level.creator = request.user
+			level.save()
+			return JsonResponse({
+				'id': level.pk
+			}, safe=False)
 		return HttpResponse(status=403)
 
 class ReportView(generics.ListCreateAPIView):
@@ -189,5 +207,6 @@ def levelImageView(request, id):
 
 	response = HttpResponse(mapImage)
 	response['Content-Type'] = 'image/svg+xml'
+	response['Cache-control'] = 'max-age=0, must-revalidate, no-store'
 
 	return response
