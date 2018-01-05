@@ -89,6 +89,10 @@ class LevelView(generics.ListCreateAPIView):
 			id = self.request.query_params.get('id', None)
 			if id is not None:
 				queryset = Level.objects.filter(pk = id)
+			else:
+				onlyUser = self.request.query_params.get('user', None)
+				if onlyUser == '1':
+					queryset = Level.objects.filter(creator = self.request.user)
 		return queryset
 
 	def get(self, request, *args, **kwargs):
