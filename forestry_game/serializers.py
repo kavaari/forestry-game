@@ -42,5 +42,11 @@ class ReportSerializer(serializers.ModelSerializer):
 	m_score = serializers.CharField(source='score', read_only=True)
 	class Meta:
 		model = Report
-		fields = ('id', 'timestamp', 'distance', 'gas_consumption', 'duration', 'logs', 'user', 'level', 'm_score')
+		fields = ('id', 'timestamp', 'distance',
+			'gas_consumption', 'duration', 'logs',
+			'user', 'level', 'm_score',
+			'driving_unloaded_time', 'loading', 'driving_loaded_time',
+			'unloading', 'idling', 'driving_forward',
+			'reverse', 'driving_unloaded_distance', 'driving_loaded_distance',
+			'fuel_cost', 'worker_salary', 'loads_transported', 'productivity')
 		

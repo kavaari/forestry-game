@@ -24,6 +24,24 @@ class Report(models.Model):
     user = models.ForeignKey(User)
     level = models.ForeignKey(Level)
 
+    #For detailed report
+    driving_unloaded_time = models.IntegerField(default=0)
+    loading = models.IntegerField(default=0)
+    driving_loaded_time = models.IntegerField(default=0)
+    unloading = models.IntegerField(default=0)
+    idling = models.IntegerField(default=0)
+
+    driving_forward = models.IntegerField(default=0)
+    reverse = models.IntegerField(default=0)
+    driving_unloaded_distance = models.IntegerField(default=0)
+    driving_loaded_distance = models.IntegerField(default=0)
+
+    fuel_cost = models.FloatField(default=0)
+    worker_salary = models.IntegerField(default=0)
+
+    loads_transported = models.IntegerField(default=0)
+    productivity = models.FloatField(default=0)
+
     def score(self):
         SALARY = 20
         DIESEL_PRICE = 1.2
