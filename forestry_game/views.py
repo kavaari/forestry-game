@@ -176,9 +176,8 @@ class ReportView(generics.ListCreateAPIView):
 			report.level = get_object_or_404(Level, pk=request.POST['id'])
 
 			report.driving_unloaded_time = request.POST['driving_unloaded_time']
-			report.loading = request.POST['loading']
 			report.driving_loaded_time = request.POST['driving_loaded_time']
-			report.unloading = request.POST['unloading']
+			report.loading_and_unloading = request.POST['loading_and_unloading']
 			report.idling = request.POST['idling']
 
 			report.driving_forward = request.POST['driving_forward']
