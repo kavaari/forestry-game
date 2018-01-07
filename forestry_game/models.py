@@ -32,13 +32,15 @@ class Report(models.Model):
 
     driving_forward = models.FloatField(default=0)
     reverse = models.FloatField(default=0)
-    driving_unloaded_distance = models.IntegerField(default=0)
-    driving_loaded_distance = models.IntegerField(default=0)
+    driving_unloaded_distance = models.FloatField(default=0)
+    driving_loaded_distance = models.FloatField(default=0)
 
     fuel_cost = models.FloatField(default=0)
     worker_salary = models.FloatField(default=0)
 
     loads_transported = models.IntegerField(default=0)
+    logs_deposited = models.IntegerField(default=0)
+    total_volume = models.FloatField(default=0)
     productivity = models.FloatField(default=0)
 
     def score(self):

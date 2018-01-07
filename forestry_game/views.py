@@ -188,6 +188,8 @@ class ReportView(generics.ListCreateAPIView):
 			report.fuel_cost = request.POST['fuel_cost']
 			report.worker_salary = request.POST['worker_salary']
 			report.loads_transported = request.POST['loads_transported']
+			report.logs_deposited = request.POST['logs_deposited']
+			report.total_volume = request.POST['total_volume']
 			report.productivity = request.POST['productivity']
 			report.save()
 			return HttpResponse(status=200)
