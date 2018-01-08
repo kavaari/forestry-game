@@ -42,20 +42,64 @@ def generateSVG(mapdata):
   width = xMax + xOff + padding
   height = yMax + yOff + padding
 
+  routeColorByType = {
+    'default': '#a67f4c',
+    'dying_road': '#5fa17c',
+    'weight_limit': '#402a16'
+  }
+
+  # Routes to array (in case they are not in order)
+  routeArray = []
+  currentIndex = 1
+  while len(routeArray) < len(mapdata['routes']):
+    for route in mapdata['routes']:
+      if route['route_node'] == currentIndex:
+        routeArray.append(route)
+        currentIndex += 1
+
   # Draw routes
-  for route in mapdata['routes']:
+  for route in routeArray:
     if len(route['to']) > 0:
       for dest in route['to']:
-        for routeTo in mapdata['routes']:
-          if routeTo['route_node'] == dest:
-            svg += ('<path d="M' +
-            str(route['x'] + xOff) + ' ' +
-            str(route['y'] + yOff) + ' L' +
-            str(routeTo['x'] + xOff) + ' ' +
-            str(routeTo['y'] + yOff) + '" stroke="#a67f4c" stroke-width="50" />')
+        svg += drawRoute(
+          route['x'] + xOff,
+          route['y'] + yOff,
+          routeArray[dest-1]['x'] + xOff,
+          routeArray[dest-1]['y'] + yOff,
+          routeColorByType['default']
+        )
+
+  # Draw anomalies
+  for route in routeArray:
+    routeColor = routeColorByType['default']
+
+    if 'anomalies' in route and len(route['anomalies']) > 0:
+      for anomaly in route['anomalies']:
+        if 'dying_road' in anomaly:
+          routeColor = routeColorByType['dying_road']
+        if 'weight_limit' in anomaly:
+          routeColor = routeColorByType['weight_limit']
+
+        if 'one_way_road' in anomaly and 'to' in anomaly:
+          x1 = route['x'] + xOff
+          x2 = routeArray[anomaly['to']-1]['x'] + xOff
+          y1 = route['y'] + yOff
+          y2 = routeArray[anomaly['to']-1]['y'] + yOff   
+          svg += drawArrow((x1 + x2) / 2, (y1 + y2) / 2, angleBetween(x1, x2, y1, y2) + 135)
+        elif 'to' in anomaly:
+          svg += drawRoute(
+            route['x'] + xOff,
+            route['y'] + yOff,
+            routeArray[anomaly['to']-1]['x'] + xOff,
+            routeArray[anomaly['to']-1]['y'] + yOff,
+            routeColor
+          )
+
+  #Draw nodes
+  for route in routeArray:
     svg += ('<circle cx="' +
     str(route['x'] + xOff) + '" cy="' +
-    str(route['y'] + yOff) + '" r="25" fill="#a67f4c" />')
+    str(route['y'] + yOff) + '" r="25" fill="' + routeColorByType['default'] + '" />')
 
   logColorByType = [
     '#a28569',
@@ -100,4 +144,28 @@ def generateSVG(mapdata):
   '" height="' + str(height) +
   '" xmlns="http://www.w3.org/2000/svg" xmlns:xlink= "http://www.w3.org/1999/xlink">' + 
   svg + '</svg>')
-  
+
+def drawRoute(x1, y1, x2, y2, color):
+  return ('<path d="M' +
+    str(x1) + ' ' +
+    str(y1) + ' L' +
+    str(x2) + ' ' +
+    str(y2) + '" stroke="' + color + '" stroke-width="50" />')
+
+def drawArrow(x, y, angle):
+  return ('<rect' +
+    ' x="' + str(x) +
+    '" y="' + str(y) +
+    '" width="30"' +
+    ' height="30"' +
+    ' fill="#402a16"'
+    ' transform="rotate(' + str(angle) + ', ' + str(x) + ', ' + str(y) + ')" />' + '<rect' +
+    ' x="' + str(x+5) +
+    '" y="' + str(y+5) +
+    '" width="30"' +
+    ' height="30"' +
+    ' fill="#a67f4c"'
+    ' transform="rotate(' + str(angle) + ', ' + str(x) + ', ' + str(y) + ')" />')
+
+def angleBetween(x1, x2, y1, y2):
+  return math.degrees(math.atan2(y2 - y1, x2 - x1))
