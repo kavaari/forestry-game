@@ -174,6 +174,23 @@ class ReportView(generics.ListCreateAPIView):
 			report.logs = request.POST['logs']
 			report.user = request.user
 			report.level = get_object_or_404(Level, pk=request.POST['id'])
+
+			report.driving_unloaded_time = request.POST['driving_unloaded_time']
+			report.driving_loaded_time = request.POST['driving_loaded_time']
+			report.loading_and_unloading = request.POST['loading_and_unloading']
+			report.idling = request.POST['idling']
+
+			report.driving_forward = request.POST['driving_forward']
+			report.reverse = request.POST['reverse']
+			report.driving_unloaded_distance = request.POST['driving_unloaded_distance']
+			report.driving_loaded_distance = request.POST['driving_loaded_distance']
+			
+			report.fuel_cost = request.POST['fuel_cost']
+			report.worker_salary = request.POST['worker_salary']
+			report.loads_transported = request.POST['loads_transported']
+			report.logs_deposited = request.POST['logs_deposited']
+			report.total_volume = request.POST['total_volume']
+			report.productivity = request.POST['productivity']
 			report.save()
 			return HttpResponse(status=200)
 		return HttpResponse(status=403)

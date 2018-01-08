@@ -17,12 +17,31 @@ class Level(models.Model):
 # result from a single run in the game
 class Report(models.Model):
     timestamp = models.DateTimeField(auto_now=True)
-    distance = models.IntegerField(default=0)
+    distance = models.FloatField(default=0)
     gas_consumption = models.FloatField(default=0)
     duration = models.IntegerField(default=0)
     logs = models.TextField(default="")
     user = models.ForeignKey(User)
     level = models.ForeignKey(Level)
+
+    #For detailed report
+    driving_unloaded_time = models.IntegerField(default=0)
+    driving_loaded_time = models.IntegerField(default=0)
+    loading_and_unloading = models.IntegerField(default=0)
+    idling = models.IntegerField(default=0)
+
+    driving_forward = models.FloatField(default=0)
+    reverse = models.FloatField(default=0)
+    driving_unloaded_distance = models.FloatField(default=0)
+    driving_loaded_distance = models.FloatField(default=0)
+
+    fuel_cost = models.FloatField(default=0)
+    worker_salary = models.FloatField(default=0)
+
+    loads_transported = models.IntegerField(default=0)
+    logs_deposited = models.IntegerField(default=0)
+    total_volume = models.FloatField(default=0)
+    productivity = models.FloatField(default=0)
 
     def score(self):
         SALARY = 20
