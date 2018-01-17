@@ -114,17 +114,29 @@ class LevelView(generics.ListCreateAPIView):
 		return response
 
 	def post(self, request):
-		if request.user.is_authenticated():
-			level = Level()
-			level.name = request.POST['levelName']
-			level.mapdata = request.POST['mapData']
-			level.mapinfo = request.POST['mapInfo']
-			level.creator = request.user
-			level.save()
-			return JsonResponse({
-				'id': level.pk
-			}, safe=False)
-		return HttpResponse(status=403)
+		if request.path == '/api/v1/level/delete':
+			print (request.path)
+			if request.user.is_authenticated():
+				if 'id' in request.POST:
+					level = get_object_or_404(Level, pk=request.POST['id'])
+					level.delete()
+					return HttpResponse(status=200)
+				else:
+					return HttpResponse(status=400)
+			else:
+				return HttpResponse(status=403)
+		else:
+			if request.user.is_authenticated():
+				level = Level()
+				level.name = request.POST['levelName']
+				level.mapdata = request.POST['mapData']
+				level.mapinfo = request.POST['mapInfo']
+				level.creator = request.user
+				level.save()
+				return JsonResponse({
+					'id': level.pk
+				}, safe=False)
+			return HttpResponse(status=403)
 
 class LevelUpdateView(generics.ListCreateAPIView):
 	permission_classes = (IsAuthenticated,)
