@@ -35,6 +35,7 @@ urlpatterns = [
     url(r'^api/v1/auth/logout', views.logoutView, name="logout" ),
     url(r'^api/v1/level/$', LevelView.as_view(), name="level" ),
     url(r'^api/v1/level/update', LevelUpdateView.as_view(), name="levelupdate" ),
+    url(r'^api/v1/level/delete', LevelView.as_view(), name="leveldelete" ),
     url(r'^api/v1/report/', ReportView.as_view(), name="report" ),
     url(r'^api/v1/validate/', views.validate),
     #Image url
