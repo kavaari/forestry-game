@@ -1,5 +1,11 @@
 import math
 def generateSVG(mapdata):
+  # If fog, just gray image
+  if 'weather' in mapdata:
+    if 'type' in mapdata['weather']:
+      if mapdata['weather']['type'] == 'fog':
+        return '<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg" xmlns:xlink= "http://www.w3.org/1999/xlink"><rect width="100" height="100" x="0" y="0" fill="#7F7F7F" /></svg>'
+
   svg = ''
 
   # Find smallest and largest x and y values and set offsets and dimensions
