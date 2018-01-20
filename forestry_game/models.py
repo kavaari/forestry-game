@@ -9,6 +9,7 @@ class Level(models.Model):
     mapdata = models.TextField(default="")
     mapinfo = models.TextField(default="")
     creator = models.ForeignKey(User)
+    svg = models.TextField(default="")
 
     def __str__(self):
         return self.name + ' - ' + self.creator.username + ' - ' + str(self.pk)

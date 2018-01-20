@@ -132,6 +132,7 @@ class LevelView(generics.ListCreateAPIView):
 				level.mapdata = request.POST['mapData']
 				level.mapinfo = request.POST['mapInfo']
 				level.creator = request.user
+				level.svg = generateSVG(json.loads(request.POST['mapData']))
 				level.save()
 				return JsonResponse({
 					'id': level.pk
@@ -148,6 +149,7 @@ class LevelUpdateView(generics.ListCreateAPIView):
 			level.mapdata = request.POST['mapData']
 			level.mapinfo = request.POST['mapInfo']
 			level.creator = request.user
+			level.svg = generateSVG(json.loads(request.POST['mapData']))
 			level.save()
 			return JsonResponse({
 				'id': level.pk
@@ -231,10 +233,8 @@ def home ( request ):
 
 def levelImageView(request, id):
 	level = get_object_or_404(Level, pk=id)
-	mapdata = json.loads(level.mapdata)
-	mapImage = generateSVG(mapdata)
 
-	response = HttpResponse(mapImage)
+	response = HttpResponse(level.svg)
 	response['Content-Type'] = 'image/svg+xml'
 	response['Cache-control'] = 'max-age=0, must-revalidate, no-store'
 
