@@ -4,7 +4,7 @@ def generateSVG(mapdata):
   if 'weather' in mapdata:
     if 'type' in mapdata['weather']:
       if mapdata['weather']['type'] == 'fog':
-        return '<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg" xmlns:xlink= "http://www.w3.org/1999/xlink"><rect width="100" height="100" x="0" y="0" fill="#7F7F7F" /></svg>'
+        return fog()
 
   svg = ''
 
@@ -56,12 +56,19 @@ def generateSVG(mapdata):
 
   # Routes to array (in case they are not in order)
   routeArray = []
-  currentIndex = 1
+  currentIndex = 0
+  nodeFound = False
   while len(routeArray) < len(mapdata['routes']):
+    nodeFound = False
     for route in mapdata['routes']:
       if route['route_node'] == currentIndex:
         routeArray.append(route)
         currentIndex += 1
+        nodeFound = True
+        break
+    if not nodeFound:
+      print ('SVG generator received mapdata in invalid format')
+      return fog()
 
   # Draw routes
   for route in routeArray:
@@ -70,8 +77,8 @@ def generateSVG(mapdata):
         svg += drawRoute(
           route['x'] + xOff,
           route['y'] + yOff,
-          routeArray[dest-1]['x'] + xOff,
-          routeArray[dest-1]['y'] + yOff,
+          routeArray[dest]['x'] + xOff,
+          routeArray[dest]['y'] + yOff,
           routeColorByType['default']
         )
 
@@ -175,3 +182,6 @@ def drawArrow(x, y, angle):
 
 def angleBetween(x1, x2, y1, y2):
   return math.degrees(math.atan2(y2 - y1, x2 - x1))
+
+def fog():
+  return '<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg" xmlns:xlink= "http://www.w3.org/1999/xlink"><rect width="100" height="100" x="0" y="0" fill="#7F7F7F" /></svg>'

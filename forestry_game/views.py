@@ -115,7 +115,6 @@ class LevelView(generics.ListCreateAPIView):
 
 	def post(self, request):
 		if request.path == '/api/v1/level/delete':
-			print (request.path)
 			if request.user.is_authenticated():
 				if 'id' in request.POST:
 					level = get_object_or_404(Level, pk=request.POST['id'])
