@@ -27,9 +27,11 @@ class LevelSerializer(serializers.ModelSerializer):
 		fields = ('id', 'name', 'timestamp', 'last_edited', 'mapdata', 'mapinfo', 'creator')
 
 class MapInfoSerializer(serializers.ModelSerializer):
+	creator = serializers.CharField(source='creator.username', read_only=True)
+
 	class Meta:
 		model = Level
-		fields = ('id', 'name', 'mapinfo')
+		fields = ('id', 'name', 'mapinfo', 'creator', 'last_edited')
 
 class MapDataSerializer(serializers.ModelSerializer):
 	class Meta:
