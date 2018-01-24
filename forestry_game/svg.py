@@ -95,16 +95,16 @@ def generateSVG(mapdata):
 
         if 'one_way_road' in anomaly and 'to' in anomaly:
           x1 = route['x'] + xOff
-          x2 = routeArray[anomaly['to']-1]['x'] + xOff
+          x2 = routeArray[anomaly['to']]['x'] + xOff
           y1 = route['y'] + yOff
-          y2 = routeArray[anomaly['to']-1]['y'] + yOff   
+          y2 = routeArray[anomaly['to']]['y'] + yOff   
           svg += drawArrow((x1 + x2) / 2, (y1 + y2) / 2, angleBetween(x1, x2, y1, y2) + 135)
         elif 'to' in anomaly:
           svg += drawRoute(
             route['x'] + xOff,
             route['y'] + yOff,
-            routeArray[anomaly['to']-1]['x'] + xOff,
-            routeArray[anomaly['to']-1]['y'] + yOff,
+            routeArray[anomaly['to']]['x'] + xOff,
+            routeArray[anomaly['to']]['y'] + yOff,
             routeColor
           )
 

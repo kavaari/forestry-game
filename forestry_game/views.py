@@ -233,7 +233,13 @@ def home ( request ):
 def levelImageView(request, id):
 	level = get_object_or_404(Level, pk=id)
 
-	response = HttpResponse(level.svg)
+	# Generate SVG on request
+	# svg = generateSVG(json.loads(level.mapdata))
+
+	# Use SVG generated to db when map was saved
+	svg = level.svg
+
+	response = HttpResponse(svg)
 	response['Content-Type'] = 'image/svg+xml'
 	response['Cache-control'] = 'max-age=0, must-revalidate, no-store'
 
