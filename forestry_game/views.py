@@ -5,6 +5,7 @@ from rest_framework.authentication import SessionAuthentication, BasicAuthentica
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.decorators import permission_classes
 from django.contrib.auth import authenticate, login, logout as django_logout
+from django.db.models import Q
 
 from django.contrib.auth.models import User
 from forestry_game.models import Level, Report
@@ -85,17 +86,28 @@ class LevelView(generics.ListCreateAPIView):
 
 	def get_queryset(self):
 		queryset = Level.objects.all()
+		id = self.request.query_params.get('id', None)
+		query = self.request.query_params.get('q', None)
+		onlyUser = self.request.query_params.get('user', None)
 		if self.request.method == 'GET':
-			id = self.request.query_params.get('id', None)
-			if id is not None:
-				queryset = Level.objects.filter(pk = id)
+			# If no query params, get all official maps
+			if id is None and query is None and onlyUser is None:
+				queryset = queryset.filter(is_official = True)
 			else:
-				onlyUser = self.request.query_params.get('user', None)
-				if onlyUser == '1':
-					if self.request.user.is_authenticated():
-						queryset = Level.objects.filter(creator = self.request.user)
-					else:
-						return None
+				# If id provided, only get that level
+				if id is not None:
+					queryset = Level.objects.filter(pk = id)
+				else:
+					# If onlyUser=1, return only the user's levels
+					if onlyUser == '1':
+						if self.request.user.is_authenticated():
+							queryset = queryset.filter(creator = self.request.user)
+						else:
+							return None
+					# If there's a query, find by level and creator name
+					if query is not None:
+						queryset = queryset.filter(Q(name__contains=query) | Q(creator__username__contains=query))
+
 		return queryset
 
 	def get(self, request, *args, **kwargs):
