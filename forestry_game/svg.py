@@ -1,10 +1,11 @@
 import math
 def generateSVG(mapdata):
-  # If fog, just gray image
+  # If fog, just gray image with faded routes
+  fog = False
   if 'weather' in mapdata:
     if 'type' in mapdata['weather']:
       if mapdata['weather']['type'] == 'fog':
-        return fog()
+        fog = True
 
   svg = ''
 
@@ -51,68 +52,68 @@ def generateSVG(mapdata):
   routeColorByType = {
     'default': '#a67f4c',
     'dying_road': '#5fa17c',
-    'weight_limit': '#402a16'
+    'weight_limit': '#402a16',
+    'fog': '#727272'
   }
 
-  # Routes to array (in case they are not in order)
-  routeArray = []
-  currentIndex = 0
-  nodeFound = False
-  while len(routeArray) < len(mapdata['routes']):
-    nodeFound = False
-    for route in mapdata['routes']:
-      if route['route_node'] == currentIndex:
-        routeArray.append(route)
-        currentIndex += 1
-        nodeFound = True
-        break
-    if not nodeFound:
-      print ('SVG generator received mapdata in invalid format')
-      return fog()
+  # Routes to dict (index for node ID)
+  routeI = {}
+  for i, route in enumerate(mapdata['routes']):
+    routeI[route['route_node']] = i
 
   # Draw routes
-  for route in routeArray:
+  for route in mapdata['routes']:
+    routeColor = routeColorByType['default']
+    if fog:
+      routeColor = routeColorByType['fog']
     if len(route['to']) > 0:
       for dest in route['to']:
+        destI = routeI[mapdata['routes'][routeI[dest]]['route_node']]
         svg += drawRoute(
           route['x'] + xOff,
           route['y'] + yOff,
-          routeArray[dest]['x'] + xOff,
-          routeArray[dest]['y'] + yOff,
-          routeColorByType['default']
+          mapdata['routes'][destI]['x'] + xOff,
+          mapdata['routes'][destI]['y'] + yOff,
+          routeColor
         )
 
   # Draw anomalies
-  for route in routeArray:
-    routeColor = routeColorByType['default']
+  if not fog:
+    for route in mapdata['routes']:
+      routeColor = routeColorByType['default']
 
-    if 'anomalies' in route and len(route['anomalies']) > 0:
-      for anomaly in route['anomalies']:
-        if 'dying_road' in anomaly:
-          routeColor = routeColorByType['dying_road']
-        if 'weight_limit' in anomaly:
-          routeColor = routeColorByType['weight_limit']
+      if 'anomalies' in route and len(route['anomalies']) > 0:
+        for anomaly in route['anomalies']:
+          if 'dying_road' in anomaly:
+            routeColor = routeColorByType['dying_road']
+          if 'weight_limit' in anomaly:
+            routeColor = routeColorByType['weight_limit']
 
-        if 'one_way_road' in anomaly and 'to' in anomaly:
-          x1 = route['x'] + xOff
-          x2 = routeArray[anomaly['to']]['x'] + xOff
-          y1 = route['y'] + yOff
-          y2 = routeArray[anomaly['to']]['y'] + yOff   
-          svg += drawArrow((x1 + x2) / 2, (y1 + y2) / 2, angleBetween(x1, x2, y1, y2) + 135)
-        elif 'to' in anomaly:
-          svg += drawRoute(
-            route['x'] + xOff,
-            route['y'] + yOff,
-            routeArray[anomaly['to']]['x'] + xOff,
-            routeArray[anomaly['to']]['y'] + yOff,
-            routeColor
-          )
+          if 'one_way_road' in anomaly and 'to' in anomaly:
+            destI = routeI[mapdata['routes'][routeI[anomaly['to']]]['route_node']]
+            x1 = route['x'] + xOff
+            x2 = mapdata['routes'][destI]['x'] + xOff
+            y1 = route['y'] + yOff
+            y2 = mapdata['routes'][destI]['y'] + yOff   
+            svg += drawArrow((x1 + x2) / 2, (y1 + y2) / 2, angleBetween(x1, x2, y1, y2) + 135)
+          elif 'to' in anomaly:
+            destI = routeI[mapdata['routes'][routeI[anomaly['to']]]['route_node']]
+            svg += drawRoute(
+              route['x'] + xOff,
+              route['y'] + yOff,
+              mapdata['routes'][destI]['x'] + xOff,
+              mapdata['routes'][destI]['y'] + yOff,
+              routeColor
+            )
 
   #Draw nodes
-  for route in routeArray:
+  for route in mapdata['routes']:
+    routeColor = routeColorByType['default']
+    if fog:
+      routeColor = routeColorByType['fog']
     svg += ('<circle cx="' +
     str(route['x'] + xOff) + '" cy="' +
-    str(route['y'] + yOff) + '" r="25" fill="' + routeColorByType['default'] + '" />')
+    str(route['y'] + yOff) + '" r="25" fill="' + routeColor + '" />')
 
   logColorByType = [
     '#a28569',
@@ -123,37 +124,38 @@ def generateSVG(mapdata):
     '#2c57c3'
   ]
 
-  # Draw logs
-  for log in mapdata['logs']:
-    logColor = logColorByType[log['type']]
-    if not 'rot' in log:
-      log['rot'] = 0
+  if not fog:
+    # Draw logs
+    for log in mapdata['logs']:
+      logColor = logColorByType[log['type']]
+      if not 'rot' in log:
+        log['rot'] = 0
 
-    svg += ('<path d="M' +
-    str(log['x'] + xOff - 25) + ' ' +
-    str(log['y'] + yOff) +' L' +
-    str(log['x'] + xOff + 25) + ' ' +
-    str(log['y'] + yOff) + '" stroke="' + logColor + '" stroke-width="5" ' + 
-    'transform="rotate(' + str(math.degrees(log['rot']))  + ' ' + str(log['x'] + xOff) + ' ' + str(log['y'] + yOff) + ')" />')
+      svg += ('<path d="M' +
+      str(log['x'] + xOff - 25) + ' ' +
+      str(log['y'] + yOff) +' L' +
+      str(log['x'] + xOff + 25) + ' ' +
+      str(log['y'] + yOff) + '" stroke="' + logColor + '" stroke-width="5" ' + 
+      'transform="rotate(' + str(math.degrees(log['rot']))  + ' ' + str(log['x'] + xOff) + ' ' + str(log['y'] + yOff) + ')" />')
 
-  # Draw log deposits
-  for logdeposit in mapdata['logdeposits']:
-    depositColor = '#333333'
-    if 'type' in logdeposit:
-      depositColor = logColorByType[logdeposit['type']]
-    if not 'rot' in logdeposit:
-      logdeposit['rot'] = 0
-    svg += ('<rect width="150" height="50" style="fill:' + depositColor + '" x="' +
-    str(logdeposit['x'] + xOff - 75) + '" y="' +
-    str(logdeposit['y'] + yOff - 25) + '" '+
-    'transform="rotate(' + str(math.degrees(logdeposit['rot']))  + ' ' + str(logdeposit['x'] + xOff) + ' ' + str(logdeposit['y'] + yOff) + ')" />')
+    # Draw log deposits
+    for logdeposit in mapdata['logdeposits']:
+      depositColor = '#333333'
+      if 'type' in logdeposit:
+        depositColor = logColorByType[logdeposit['type']]
+      if not 'rot' in logdeposit:
+        logdeposit['rot'] = 0
+      svg += ('<rect width="150" height="50" style="fill:' + depositColor + '" x="' +
+      str(logdeposit['x'] + xOff - 75) + '" y="' +
+      str(logdeposit['y'] + yOff - 25) + '" '+
+      'transform="rotate(' + str(math.degrees(logdeposit['rot']))  + ' ' + str(logdeposit['x'] + xOff) + ' ' + str(logdeposit['y'] + yOff) + ')" />')
 
-  # Draw startpoint
-  svg += ('<circle r="15" fill="#FFDE00" stroke="#000000" stroke-width="2" cx="' +
-  str(mapdata['startpoint']['x'] + xOff) + '" cy="' +
-  str(mapdata['startpoint']['y'] + yOff) + '" />')
+    # Draw startpoint
+    svg += ('<circle r="15" fill="#FFDE00" stroke="#000000" stroke-width="2" cx="' +
+    str(mapdata['startpoint']['x'] + xOff) + '" cy="' +
+    str(mapdata['startpoint']['y'] + yOff) + '" />')
 
-  return ('<svg width="' + str(width) +
+  return ('<svg id="map-svg-image" width="' + str(width) +
   '" height="' + str(height) +
   '" xmlns="http://www.w3.org/2000/svg" xmlns:xlink= "http://www.w3.org/1999/xlink">' + 
   svg + '</svg>')
@@ -182,6 +184,3 @@ def drawArrow(x, y, angle):
 
 def angleBetween(x1, x2, y1, y2):
   return math.degrees(math.atan2(y2 - y1, x2 - x1))
-
-def fog():
-  return '<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg" xmlns:xlink= "http://www.w3.org/1999/xlink"><rect width="100" height="100" x="0" y="0" fill="#7F7F7F" /></svg>'
