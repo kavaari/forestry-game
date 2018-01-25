@@ -54,36 +54,26 @@ def generateSVG(mapdata):
     'weight_limit': '#402a16'
   }
 
-  # Routes to array (in case they are not in order)
-  routeArray = []
-  currentIndex = 0
-  nodeFound = False
-  while len(routeArray) < len(mapdata['routes']):
-    nodeFound = False
-    for route in mapdata['routes']:
-      if route['route_node'] == currentIndex:
-        routeArray.append(route)
-        currentIndex += 1
-        nodeFound = True
-        break
-    if not nodeFound:
-      print ('SVG generator received mapdata in invalid format')
-      return fog()
+  # Routes to dict (index for node ID)
+  routeI = {}
+  for i, route in enumerate(mapdata['routes']):
+    routeI[route['route_node']] = i
 
   # Draw routes
-  for route in routeArray:
+  for route in mapdata['routes']:    
     if len(route['to']) > 0:
       for dest in route['to']:
+        destI = routeI[mapdata['routes'][routeI[dest]]['route_node']]
         svg += drawRoute(
           route['x'] + xOff,
           route['y'] + yOff,
-          routeArray[dest]['x'] + xOff,
-          routeArray[dest]['y'] + yOff,
+          mapdata['routes'][destI]['x'] + xOff,
+          mapdata['routes'][destI]['y'] + yOff,
           routeColorByType['default']
         )
 
   # Draw anomalies
-  for route in routeArray:
+  for route in mapdata['routes']:
     routeColor = routeColorByType['default']
 
     if 'anomalies' in route and len(route['anomalies']) > 0:
@@ -94,22 +84,24 @@ def generateSVG(mapdata):
           routeColor = routeColorByType['weight_limit']
 
         if 'one_way_road' in anomaly and 'to' in anomaly:
+          destI = routeI[mapdata['routes'][routeI[anomaly['to']]]['route_node']]
           x1 = route['x'] + xOff
-          x2 = routeArray[anomaly['to']]['x'] + xOff
+          x2 = mapdata['routes'][destI]['x'] + xOff
           y1 = route['y'] + yOff
-          y2 = routeArray[anomaly['to']]['y'] + yOff   
+          y2 = mapdata['routes'][destI]['y'] + yOff   
           svg += drawArrow((x1 + x2) / 2, (y1 + y2) / 2, angleBetween(x1, x2, y1, y2) + 135)
         elif 'to' in anomaly:
+          destI = routeI[mapdata['routes'][routeI[anomaly['to']]]['route_node']]
           svg += drawRoute(
             route['x'] + xOff,
             route['y'] + yOff,
-            routeArray[anomaly['to']]['x'] + xOff,
-            routeArray[anomaly['to']]['y'] + yOff,
+            mapdata['routes'][destI]['x'] + xOff,
+            mapdata['routes'][destI]['y'] + yOff,
             routeColor
           )
 
   #Draw nodes
-  for route in routeArray:
+  for route in mapdata['routes']:
     svg += ('<circle cx="' +
     str(route['x'] + xOff) + '" cy="' +
     str(route['y'] + yOff) + '" r="25" fill="' + routeColorByType['default'] + '" />')
@@ -185,3 +177,6 @@ def angleBetween(x1, x2, y1, y2):
 
 def fog():
   return '<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg" xmlns:xlink= "http://www.w3.org/1999/xlink"><rect width="100" height="100" x="0" y="0" fill="#7F7F7F" /></svg>'
+
+def findNodeIndex(routes, nodeID):
+  pass
