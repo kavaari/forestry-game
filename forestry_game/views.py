@@ -174,12 +174,13 @@ class ReportView(generics.ListCreateAPIView):
 	def get_queryset(self):
 		queryset = Report.objects.all()
 		if self.request.method == 'GET':
-			if not self.request.user.is_superuser:
-				id = self.request.query_params.get('n', None)
-				if id is not None:
-					queryset = Report.objects.filter(pk = id)
-				elif self.request.user.is_authenticated():
-					queryset = Report.objects.filter(user = self.request.user).order_by('-timestamp')
+			id = self.request.query_params.get('n', None)
+			if id is not None:
+				queryset = Report.objects.filter(pk = id)
+			elif self.request.user.is_authenticated():
+				queryset = Report.objects.filter(user = self.request.user).order_by('-timestamp')
+			else:
+				return None
 		return queryset
 
 	def get(self, request, *args, **kwargs):
