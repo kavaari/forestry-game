@@ -74,7 +74,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             os.path.join(BASE_DIR, "forestry_game/templates/"),
-            os.path.join(BASE_DIR, 'static/')
+            os.path.join(BASE_DIR, 'forestry_game/static/')
          ],
         'APP_DIRS': True,
         'OPTIONS': {
