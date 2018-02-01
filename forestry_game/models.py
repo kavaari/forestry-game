@@ -46,6 +46,9 @@ class Report(models.Model):
     productivity = models.FloatField(default=0)
 
     def score(self):
+        # Notice: If you change SALARY, HOUR or DIESEL_PICE,
+        # you also have to change them accordingly in the
+        # frontend (src/game/settings.js)
         SALARY = 20
         DIESEL_PRICE = 1.2
         HOUR = 3600
