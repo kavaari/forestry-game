@@ -22,3 +22,5 @@ Questions and undecided stuff
 ## Frontend
 
 https://github.com/gaviarctica/forestry-game-frontend
+
+# Current version 1.0
